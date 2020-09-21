@@ -1,0 +1,10 @@
+body {
+	max-width: 1800px;
+	width: calc(100%-100px);
+	margin: auto;
+}
+
+#chart-container {
+	max-height: calc(100% - 100px);
+	height: 100%;
+}

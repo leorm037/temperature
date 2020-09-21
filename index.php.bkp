@@ -1,0 +1,101 @@
+<html lang="pt_BR">
+	<head>
+		<title>Temperatura</title>
+		<style type="text/css">
+			body {
+				width: calc(100%-20px);
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			#chart-container {
+				width: 100%;
+				height: auto;
+			}
+		</style>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/Chart.min.js"></script>
+	</head>
+	<body>
+		<div id="chart-container">
+			<canvas id="graphCanvas"></canvas>
+		</div>
+		<script>
+			$(document).ready(function(){
+				showGraph();
+			});
+
+			function showGraph(){
+				{
+					$.post(
+						"json.php",
+						function(data){
+							var timestamp = [];
+							var environment = [];
+							var cpu = [];
+							var gpu = [];
+
+							for(var i in data){
+								timestamp.push(data[i][0]);
+								environment.push(data[i][1]);
+								cpu.push(data[i][2]);
+								gpu.push(data[i][3]);
+							}
+
+							console.group("Timestamp");
+							console.log(timestamp);
+							console.group("Environment");
+							console.log(environment);
+							console.group("CPU");
+							console.log(cpu);
+							console.group("GPU");
+							console.log(gpu);
+
+							var chartdata = {
+								labels: timestamp,
+								datasets: [
+									{
+										label: "Ambiente",
+										backgroundColor: '#49e2ff',
+										borderColor: '#46d5f1',
+										hoverBackgroudColor: '$cccccc',
+										hoverBorderColor: '#666666',
+										data: environment
+									},
+									{
+										label: "CPU",
+										backgroundColor: '#49e2ff',
+										borderColor: '#46d5f1',
+										hoverBackgroudColor: '$cccccc',
+										hoverBorderColor: '#666666',
+										data: cpu
+
+									},
+									{
+										label: "GPU",
+										backgroundColor: '#49e2ff',
+										borderColor: '#46d5f1',
+										hoverBackgroudColor: '$cccccc',
+										hoverBorderColor: '#666666',
+										data: gpu
+
+									}
+								]
+							};
+
+							var graphTarget = $("#graphCanvas");
+
+							var barGraph = new Chart(
+								graphTarget, 
+								{
+									type: 'bar',
+									data: chartdata
+								}
+							);
+						}
+					);
+				}
+			}
+		</script>
+	</body>
+</html>
