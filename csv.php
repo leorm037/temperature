@@ -14,7 +14,7 @@ $stmt = $pdo->query($sql);
 
 $temperatures = $stmt->fetchAll();
 
-echo "timestamp,environment,cpu,gpu\n";
+//echo "timestamp,environment,cpu,gpu\n";
 
 foreach($temperatures as $temperature){
 	$timestamp = str_replace("-","/",$temperature['timestamp']);
