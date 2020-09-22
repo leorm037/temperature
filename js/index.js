@@ -1,5 +1,5 @@
 function showGraph(){
-	g = new Dygraph(
+	return new Dygraph(
 		document.getElementById("graph"),
 		"csv.php", // path to CSV file
 			{
@@ -34,57 +34,41 @@ function showGraph(){
 			strokeWidth: 1.5,
 		} // options
 	);
-	
-	return g;
 }
 
-function currentTemperature(){
-	var temp = [];
-	
-	$.post(
+
+function showThermometer(){	
+	$.getJSON(
 		'current-temperature-json.php',
 		function(data){
-			temp[0] = data[0]['last'];
-			temp[1] = data[0]['max'];
-			temp[2] = data[0]['min'];			
+			var r = new RGraph.Thermometer({
+				id: 'thermometer',
+				min: data[0]['min'],
+				max: data[0]['max'],
+				value: data[0]['last'],
+				options: {
+					colors: ['Gradient(#c00:red:#f66:#fcc)'],
+					labelsValueDecimals: 2,
+					labelsValuePoint: ',',
+					labelsValueUnitsPost: 'ºC',
+					scaleVisible: true,
+					scalePoint: ',',
+					scaleDecimals: 2,
+					scaleUnitsPost: 'ºC',
+					titleSide: 'Temperatura atual',
+				}
+			}).draw();
 		}
 	);
-	
-	return temp;
 }
 
-function showThermometer(){
-	var data = currentTemperature();
-	
-	th = new RGraph.Thermometer({
-		id: 'thermometer',
-		min: data[2],
-		max: data[1],
-		value: data[0],
-		options: {
-			colors: ['Gradient(#c00:red:#f66:#fcc)'],
-			labelsValueDecimals: 2,
-			labelsValuePoint: ',',
-			labelsValueUnitsPost: 'ºC',
-			scaleVisible: true,
-			scalePoint: ',',
-			scaleDecimals: 2,
-			scaleUnitsPost: 'ºC',
-			titleSide: 'Temperatura atual',
-		}
-	});
-	
-	return th;
-}
+var g = showGraph();
+var t = showThermometer();
 
 $(function(){
-	showThermometer().draw();
-	
-	var g = showGraph();
-
 	window.intervalId = setInterval(function() {
 			g.updateOptions( { 'file': "csv.php" } );
-			showThermometer().draw();
+			t.draw();
 			
 		}, 300000);
 });

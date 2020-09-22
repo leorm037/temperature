@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		<div id="graph"></div>
-		<div id="thermometer"><canvas id="thermometer" width="120" height="400">[No canvas support]</canvas></div>
+		<div id="divThermometer"><canvas id="thermometer" width="120" height="400">[No canvas support]</canvas></div>
 
 		<script src="js/jquery.min.js"></script>
 		<script src="js/dygraph.min.js"></script>
