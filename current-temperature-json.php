@@ -4,7 +4,7 @@ require_once('db.php');
 
 header('Content-Type: application/json');
 
-$sql = "SELECT environment as last, MAX(environment) as max, MIN(environment) as min FROM temperature WHERE scale = 'C' ORDER BY id DESC LIMIT 1";
+$sql = "SELECT environment as last, (select MAX(environment) from temperature) as max, (select MIN(environment) from temperature) as min FROM temperature WHERE scale = 'C' AND timestamp = (select max(timestamp) from temperature)";
 
 $stmt = $pdo->query($sql);
 
