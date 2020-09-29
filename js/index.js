@@ -36,12 +36,11 @@ function showGraph(){
 	);
 }
 
-
-function showThermometer(){	
+function showThermometer(){
 	$.getJSON(
 		'current-temperature-json.php',
 		function(data){
-			var r = new RGraph.Thermometer({
+			var t = new RGraph.Thermometer({
 				id: 'thermometer',
 				min: data[0]['min'],
 				max: data[0]['max'],
@@ -57,18 +56,21 @@ function showThermometer(){
 					scaleUnitsPost: 'ºC',
 					titleSide: 'Temperatura atual',
 				}
-			}).draw();
+			});
+
+			RGraph.clear(document.getElementById('thermometer'));
+
+			t.draw();
 		}
 	);
 }
 
 var g = showGraph();
-var t = showThermometer();
+showThermometer();
 
 $(function(){
 	window.intervalId = setInterval(function() {
 			g.updateOptions( { 'file': "csv.php" } );
-			t.draw();
-			
+			showThermometer();
 		}, 300000);
 });
