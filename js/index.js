@@ -3,7 +3,7 @@ function showGraph(){
 		document.getElementById("graph"),
 		"csv.php", // path to CSV file
 			{
-			labels: ['Data', 'Ambiente', 'CPU', 'GPU'],
+			labels: ['Data', 'Ambiente', 'CPU', 'GPU','Externa','Sensação'],
 			labelsSeparateLines: true,
 			series : {
 				'Ambiente': {
@@ -15,13 +15,25 @@ function showGraph(){
 					highlightCircleSize: 6,
 				},
 				'CPU': {
-					color: 'blue',
+					color: 'black',
 					drawPoints: true,
 					pointSize: 2,
 					highlightCircleSize: 6,
 				},
 				'GPU': {
 					color: 'grey',
+					drawPoints: true,
+					pointSize: 2,
+					highlightCircleSize: 6,
+				},
+				'Externa': {
+					color: 'blue',
+					drawPoints: true,
+					pointSize: 2,
+					highlightCircleSize: 6,
+				},
+				'Sensação': {
+					color: 'orange',
 					drawPoints: true,
 					pointSize: 2,
 					highlightCircleSize: 6,

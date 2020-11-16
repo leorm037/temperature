@@ -4,7 +4,7 @@ require_once('db.php');
 
 header('Content-Type: application/json');
 
-$sql = "SELECT timestamp, environment, cpu, gpu FROM temperature WHERE scale = 'C' ORDER BY timestamp ASC";
+$sql = "SELECT timestamp, environment, cpu, gpu, external FROM temperature WHERE scale = 'C' ORDER BY timestamp ASC";
 
 $stmt = $pdo->query($sql);
 
@@ -15,8 +15,9 @@ foreach($temperatures as $temperature){
 	$tempEnvironment = (float)$temperature['environment'];
 	$tempCpu = (float)$temperature['cpu'];
 	$tempGpu = (float)$temperature['gpu'];
+	$tempExternal = (float)$temperature['external'];
 
-	$data[] = array($timestamp,$tempEnvironment,$tempCpu,$tempGpu);
+	$data[] = array($timestamp,$tempEnvironment,$tempCpu,$tempGpu,$tempExternal);
 }
 
 echo json_encode($data);
