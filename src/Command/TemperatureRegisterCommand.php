@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Factory\TemperatureFactory;
 use App\Repository\TemperatureRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -41,10 +42,14 @@ class TemperatureRegisterCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $temperature = \App\Factory\TemperatureFactory::build($this->climaTempo());
+        $temperature = TemperatureFactory::build($this->climaTempo());
+
+        $temperature
+                ->setCpu($this->cpu())
+                ->setGpu($this->gpu());
 
         $this->temperatureRepository->save($temperature, true);
-        
+
         $io->title("Temperature");
         $io->text("Temperatura: " . $temperature->getTemperature());
         $io->text("Sensação:    " . $temperature->getSensation());
@@ -65,6 +70,20 @@ class TemperatureRegisterCommand extends Command
         $climaTempo = $data['data'];
 
         return $climaTempo;
+    }
+
+    private function cpu()
+    {
+        $tempCpu = shell_exec(self::TEMP_CPU_COMMAND);
+
+        return $tempCpu / 1000;
+    }
+
+    private function gpu()
+    {
+        $tempGpu = shell_exec(self::TEMP_GPU_COMMAND);
+
+        return str_replace(['temp=', "'C"], '', $tempGpu);
     }
 
 }

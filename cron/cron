@@ -1,0 +1,1 @@
+*/5 * * * * /usr/bin/php /var/www/temperature/bin/console temperature:register

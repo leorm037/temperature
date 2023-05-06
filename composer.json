@@ -1,8 +1,18 @@
 {
+    "name": "leormm037/temperature",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
+    "description": "",
+    "version": "0.1.0-dev",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Leonardo Rodrigues Marques",
+            "email": "leonardo@paginaemconstrucao.com.br",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=8.1",
         "ext-ctype": "*",
@@ -72,6 +82,9 @@
         "symfony/polyfill-php81": "*"
     },
     "scripts": {
+        "pre-command-run": [
+            "@php bin/temperature-output"
+        ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
@@ -81,7 +94,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "code-analyse": "phpstan analyse -c phpstan.neon -l 6 --ansi src"
     },
     "conflict": {
         "symfony/symfony": "*"
