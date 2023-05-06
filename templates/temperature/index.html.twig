@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TemperatureController!{% endblock %}
+
+{% block body %}
+    <h1>Temperature</h1>
+    
+    {% for temperature in list %}
+        <p>{{ temperature.dateTime|format_datetime() }} - {{ temperature.temperature }}ºC</p>
+    {% endfor %}
+{% endblock %}

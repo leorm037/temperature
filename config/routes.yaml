@@ -1,5 +1,11 @@
-controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+#controllers:
+#    resource:
+#        path: ../src/Controller/
+#        namespace: App\Controller
+#    type: attribute
+
+#[Route('/temperature', name: 'app_temperature')]
+index:
+    path: /
+    controller: App\Controller\TemperatureController::index
+    methods: GET
