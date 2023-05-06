@@ -51,6 +51,8 @@ class TemperatureRegisterCommand extends Command
         $this->temperatureRepository->save($temperature, true);
 
         $io->title("Temperature");
+        $io->text("CPU:         " . $temperature->getCpu());
+        $io->text("GPU:         " . $temperature->getGpu());
         $io->text("Temperatura: " . $temperature->getTemperature());
         $io->text("Sensação:    " . $temperature->getSensation());
         $io->text("Humidade:    " . $temperature->getHumidity());
