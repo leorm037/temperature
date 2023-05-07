@@ -1,11 +1,55 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello TemperatureController!{% endblock %}
+{# templates/temperature/index.html.twig #}
+{% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Temperature</h1>
-    
-    {% for temperature in list %}
-        <p>{{ temperature.dateTime|format_datetime() }} - {{ temperature.temperature }}ºC</p>
-    {% endfor %}
+    <div class="row">
+        <div class="col-12">
+            <canvas height="120vh" id="temperature"></canvas>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        function update() {
+            graphicShow("{{ url('app_temperature_json_days', {"days": days}) }}", "{% trans %}Temperature{% endtrans %}", "{% trans %}Sensation{% endtrans %}", "{% trans %}Loading{% endtrans %}...");
+            updateLastTemperature("{{ url('app_temperature_json_last_temperature') }}", "#icon-thermometer");
+        }
+        //setInterval(update(), 300000);
+
+        const URL_JSON_DETAIL = "{{ url('app_temperature_json_detail') }}";
+        const LOCALE = "{{ app.request.locale }}";
+        
+        $.post('{{ url('app_temperature_json_days') }}', {'days': {{ days }} })
+                    .done(function(data, status, j){
+                        console.log(data, status, j);
+                    });
+    </script>
+{% endblock %}
+{% block modal %}
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalDetalhe" aria-labelledby="modalDetalhe" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDetalheLabel">Detalhe</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover table-borderless">
+                        <tbody>
+                            <tr><td><i class="bi bi-calendar-event"></i> {% trans %}Date{% endtrans %}:</td><td class="text-end"><span id="modalDateTime"></span></td></tr>
+                            <tr><td><i class="bi bi-cpu"></i> CPU:</td><td class="text-end"><span id="modalCPU"></td></tr>
+                            <tr><td><i class="bi bi-cpu-fill"></i> GPU:</td><td class="text-end"><span id="modalGPU"></td></tr>
+                            <tr><td><i class="bi bi-thermometer-half"></i> {% trans %}Temperature{% endtrans %}:</td><td class="text-end"><span id="modalTemperature"></span></td></tr>
+                            <tr><td><i class="bi bi-thermometer-half"></i> {% trans %}Sensation{% endtrans %}:</td><td class="text-end"><span id="modalSensation"></span></td></tr>
+                            <tr><td><i class="bi bi-signpost-split"></i> {% trans %}Wind.Direction{% endtrans %}:</td><td class="text-end"><span id="modalWindDirection"></span></td></tr>
+                            <tr><td><i class="bi bi-wind"></i> {% trans %}Wind.Velocity{% endtrans %}:</td><td class="text-end"><span id="modalWindVelocity"></span></td></tr>
+                            <tr><td><i class="bi bi-water"></i> {% trans %}Humidity{% endtrans %}:</td><td class="text-end"><span id="modalHumidity"></span></td></tr>
+                            <tr><td><i class="bi bi-asterisk"></i> {% trans %}Weather Condition{% endtrans %}:</td><td class="text-end"><span id="modalWeatherCondition"></span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

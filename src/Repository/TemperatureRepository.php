@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Temperature;
+use DateInterval;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -44,10 +46,16 @@ class TemperatureRepository extends ServiceEntityRepository
      * 
      * @return Temperature[]
      */
-    public function list()
+    public function findByDays(int $days)
     {
+        $date = new DateTime();
+        $date->sub(DateInterval::createFromDateString("{$days} day"));
+        $dateFormat = $date->format('Y-m-d H:i:s');
+
         return $this->createQueryBuilder('t')
-                        ->orderBy('t.dateTime', 'ASC')
+                        ->where('t.dateTime >= :date')
+                        ->setParameter('date', $dateFormat)
+                        ->orderBy('t.dateTime', 'DESC')
                         ->getQuery()
                         ->getResult()
         ;

@@ -5,7 +5,31 @@
 #    type: attribute
 
 #[Route('/temperature', name: 'app_temperature')]
-index:
+app_index:
     path: /
     controller: App\Controller\TemperatureController::index
     methods: GET
+    
+app_temperature_days:
+    path: /days/{days}
+    controller: App\Controller\TemperatureController::days
+    methods: GET
+    requirements:
+        days: \d+
+    defaults:
+        days: 1
+
+app_temperature_json_days:
+    path: /json/days
+    controller: App\Controller\TemperatureController::jsonDays
+    methods: POST
+    
+app_temperature_json_last_temperature:
+    path: /json/days
+    controller: App\Controller\TemperatureController::jsonDays
+    methods: POST
+    
+app_temperature_json_detail:
+    path: /json/days
+    controller: App\Controller\TemperatureController::jsonDays
+    methods: POST

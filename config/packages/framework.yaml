@@ -1,5 +1,19 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
+    assets:
+        version: '%env(APP_VERSION)%'
+        packages:
+            bootstrap:
+                base_path: '/bootstrap-5.3.0-alpha3-dist'
+            bootstrap-icon:
+                base_path: '/bootstrap-icons-1.10.5'
+            jquery:
+                base_path: '/jquery-3.6.4'
+            jquery-loading-overlay:
+                base_path: '/jquery-loading-overlay-2.1.7/dist'
+            chart:
+                base_path: '/chart.js-4.3.0/dist'
+                
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
     http_method_override: false
