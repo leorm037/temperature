@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
+use App\Helper\DateTimeHelper;
 use App\Repository\TemperatureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function dd;
 
 class TemperatureController extends AbstractController
 {
@@ -38,6 +38,22 @@ class TemperatureController extends AbstractController
         return $this->json([
                     'message' => 'success',
                     'result' => $temperatures
+        ]);
+    }
+    
+    public function jsonDetail(Request $request): JsonResponse
+    {
+        $dateString = $request->get('dateTime');
+        
+        $date = DateTimeHelper::dateTimeString($dateString, "America/Sao_Paulo");
+        
+        $temperature = $this->temperatureRepository->findByDate($date);
+        
+        $message = (null === $temperature)? 'fail' : 'success';
+
+        return $this->json([
+                    'message' => $message,
+                    'result' => $temperature
         ]);
     }
 

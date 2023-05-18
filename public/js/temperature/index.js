@@ -4,10 +4,11 @@ function graphicConstruct(tempArray) {
     var gpu = [];
     var sensation = [];
     var temperature = [];
-    
+
     Array.from(tempArray.result).reverse().map(t => {
-        let date = new Date(t.dateTime);
-       
+        let dateTimeJson = t.dateTime.replace("+00:00","");
+        let date = new Date(dateTimeJson);
+
         labels.push(date.toLocaleDateString() + " " + date.toLocaleTimeString());
         cpu.push(parseFloat(t.cpu));
         gpu.push(parseFloat(t.gpu));
@@ -55,63 +56,43 @@ function graphicConstruct(tempArray) {
             onClick: function (event, element) {
                 const TAG_SPINNER = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Carregando...</span></div>';
 
-                modalDateTime = $('#modalDateTime').html(TAG_SPINNER);                          //01
-                modalPingJitter = $('#modalPingJitter').html(TAG_SPINNER);                      //02
-                modalPingLatency = $('#modalPingLatency').html(TAG_SPINNER);                    //03
-                modalDownloadBandwidth = $('#modalDownloadBandwidth').html(TAG_SPINNER);        //04
-                modalDownloadBytes = $('#modalDownloadBytes').html(TAG_SPINNER);                //05
-                modalDownloadElapsed = $('#modalDownloadElapsed').html(TAG_SPINNER);            //06
-                modalUploadBandwidth = $('#modalUploadBandwidth').html(TAG_SPINNER);            //07
-                modalUploadBytes = $('#modalUploadBytes').html(TAG_SPINNER);                    //08
-                modalUploadElapsed = $('#modalUploadElapsed').html(TAG_SPINNER);                //09
-                modalPacketLoss = $('#modalPacketLoss').html(TAG_SPINNER);                      //10
-                modalIsp = $('#modalIsp').html(TAG_SPINNER);                                    //11
-                modalInterfaceInternalIp = $('#modalInterfaceInternalIp').html(TAG_SPINNER);    //12
-                modalInterfaceName = $('#modalInterfaceName').html(TAG_SPINNER);                //13
-                modalInterfaceMacAddr = $('#modalInterfaceMacAddr').html(TAG_SPINNER);          //14
-                modalInterfaceVpn = $('#modalInterfaceVpn').html(TAG_SPINNER);                  //15
-                modalInterfaceExternalIp = $('#modalInterfaceExternalIp').html(TAG_SPINNER);    //16
-                modalServerIp = $('#modalServerIp').html(TAG_SPINNER);                          //17
-                modalServerName = $('#modalServerName').html(TAG_SPINNER);                      //18
-                modalServerLocation = $('#modalServerLocation').html(TAG_SPINNER);              //19
-                modalServerCountry = $('#modalServerCountry').html(TAG_SPINNER);                //20
-                modalServerSelected = $('#modalServerSelected').html(TAG_SPINNER);              //21
-                modalResultUrl = $('#modalResultUrl').html(TAG_SPINNER);                        //22
-
+                modalDateTime = $('#modalDateTime').html(TAG_SPINNER);                 //01
+                modalCpu = $('#modalCpu').html(TAG_SPINNER);                           //02
+                modalGpu = $('#modalGpu').html(TAG_SPINNER);                           //03
+                modalSensation = $('#modalSensation').html(TAG_SPINNER);               //04
+                modalTemperature = $('#modalTemperature').html(TAG_SPINNER);           //05
+                modalWindDirection = $('#modalWindDirection').html(TAG_SPINNER);       //06
+                modalWindVelocity = $('#modalWindVelocity').html(TAG_SPINNER);         //07
+                modalHumidity = $('#modalHumidity').html(TAG_SPINNER);                 //08
+                modalWeatherCondition = $('#modalWeatherCondition').html(TAG_SPINNER); //09
+                modalPressure = $('#modalPressure').html(TAG_SPINNER);                 //10
                 $('#modalDetalhe').modal('show');
 
-                $.post(URL_JSON_DETAIL, {dateTime: graphic.data.labels[element[0].index]})
-                        .done(function (data) {                            
-                            if (data.message === 'success') {
-                                let d = new Date(data.speedtest.datetime);
+                let dateTimeLabel = graphic.data.labels[element[0].index];
 
-                                modalDateTime.text(d.toLocaleDateString() + " " + d.toLocaleTimeString());                                                                                                                          //01
-                                modalPingJitter.text(parseFloat(data.speedtest.pingJitter).toLocaleString(LOCALE) + " ms");                                 //02
-                                modalPingLatency.text(parseFloat(data.speedtest.pingLatency).toLocaleString(LOCALE) + " ms");                               //03
-                                modalDownloadBandwidth.text(parseFloat(data.speedtest.downloadBandwidth * 8 / 1048576).toLocaleString(LOCALE) + " Mbps");   //04
-                                modalDownloadBytes.text(parseFloat(data.speedtest.downloadBytes).toLocaleString(LOCALE) + " bytes");                        //05
-                                modalDownloadElapsed.text(parseFloat(data.speedtest.downloadElapsed).toLocaleString(LOCALE));                               //06
-                                modalUploadBandwidth.text(parseFloat(data.speedtest.uploadBandwidth * 8 / 1048576).toLocaleString(LOCALE) + " Mbps");       //07
-                                modalUploadBytes.text(parseFloat(data.speedtest.uploadBytes).toLocaleString(LOCALE) + " bytes");                            //08
-                                modalUploadElapsed.text(parseFloat(data.speedtest.uploadElapsed).toLocaleString(LOCALE));                                   //09
-                                modalPacketLoss.text(parseFloat(data.speedtest.packetLoss).toLocaleString(LOCALE) + "%");                                   //10
-                                modalIsp.text(data.speedtest.isp);                                                                                          //11
-                                modalInterfaceInternalIp.text(data.speedtest.interfaceInternalIp);                                                          //12
-                                modalInterfaceName.text(data.speedtest.interfaceName);                                                                      //13
-                                modalInterfaceMacAddr.text(data.speedtest.interfaceMacAddr);                                                                //14
-                                modalInterfaceVpn.text((data.speedtest.interfaceVpn) ? data.speedtest.interfaceVpn : LABEL_NO);                             //15
-                                modalInterfaceExternalIp.text(data.speedtest.interfaceExternalIp);                                                          //16
-                                modalServerIp.text(data.speedtest.serverIp);                                                                                //17
-                                modalServerName.text(data.speedtest.speedtestServer.name);                                                                  //18
-                                modalServerLocation.text(data.speedtest.speedtestServer.location);                                                          //19
-                                modalServerCountry.text(data.speedtest.speedtestServer.country);                                                            //20
-                                modalServerSelected.text((data.speedtest.speedtestServer.selected) ? LABEL_YES : LABEL_NO);                                 //21
-                                modalResultUrl.html("<a href='" + data.speedtest.resultUrl + "' target='_blank'><i class='bi bi-activity'></i> Speedtest report</a>"); //22
+                $.post(URL_JSON_DETAIL, {dateTime: dateTimeLabel})
+                        .done(function (data) {
+                            if (data.message === 'success') {
+                                let dJson = data.result.dateTime.replace("+00:00","");
+                                let d = new Date(dJson);
+
+                                modalDateTime.text(d.toLocaleDateString() + " " + d.toLocaleTimeString());                     //01
+                                modalCpu.text(parseFloat(data.result.cpu).toLocaleString(LOCALE) + " ºC");                     //02
+                                modalGpu.text(parseFloat(data.result.gpu).toLocaleString(LOCALE) + " ºC");                     //03
+                                modalSensation.text(parseFloat(data.result.sensation).toLocaleString(LOCALE) + " ºC");         //04
+                                modalTemperature.text(parseFloat(data.result.temperature).toLocaleString(LOCALE) + " ºC");     //05
+                                modalWindDirection.text(data.result.windDirection);                                            //06
+                                modalWindVelocity.text(parseFloat(data.result.windVelocity).toLocaleString(LOCALE) + " km/h"); //07
+                                modalHumidity.text(parseFloat(data.result.humidity).toLocaleString(LOCALE) + "%");             //08
+                                modalWeatherCondition.html(data.result.weatherCondition + " <img src='/realistic/70px/" + data.result.icon + ".png'>");                                      //09
+                                modalPressure.text(parseFloat(data.result.pressure).toLocaleString(LOCALE) + " hPa");          //10
+                            } else {
+                                console.log("Fail",dateTimeLabel);
                             }
-                        }).fail(function(data,status,j){
-                            console.log(data,status,j);
+                        }).fail(function (data) {
+                            console.log("Fail",dateTimeLabel,data);
                         });
-            },            
+            },
             responsive: true,
             elements: {
                 line: {

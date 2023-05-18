@@ -63,6 +63,20 @@ class TemperatureRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByDate(DateTime $date): ?Temperature
+    {
+        $dateFormat = $date->format('Y-m-d H:i:s');
+
+        return $this->createQueryBuilder('t')
+                        ->where('t.dateTime = :date')
+                        ->setParameter('date', $dateFormat)
+                        ->setMaxResults(1)
+                        ->getQuery()
+                        ->enableResultCache(3600)
+                        ->getOneOrNullResult()
+        ;
+    }
+
 //    /**
 //     * @return Temperature[] Returns an array of Temperature objects
 //     */

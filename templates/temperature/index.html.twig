@@ -24,6 +24,7 @@
     <script>
         const LOCALE = '{{ app.request.locale|replace({'_':'-'}) }}';
         const URL_JSON_DAYS = "{{ url('app_temperature_json_days') }}";
+        const URL_JSON_DETAIL = "{{ url('app_temperature_json_detail') }}";
         graphicShow({{ days }});
     </script>
 {% endblock %}

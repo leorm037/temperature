@@ -2,5 +2,12 @@ home: 'Página inicial'
 version: Versão
 day: dia
 days: dias
-lalbel.detail: Detalhe
 label.close: Fechar
+label.detail: Detalhe
+temperature: Temperatura
+sensation: Sensação
+humidity: Humidade
+pressure: Pressão
+'wind velocity': 'Velocidade do vento'
+'wind direction': 'Direção do vento'
+'weather condition': 'Condição do clima'
