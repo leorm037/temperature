@@ -34,8 +34,6 @@ class TemperatureController extends AbstractController
         $days = intval($request->get('days'));
         
         $temperatures = $this->temperatureRepository->findByDays($days);
-        
-        dump($temperatures);
 
         return $this->json([
                     'message' => 'success',
