@@ -1,27 +1,70 @@
 {# templates/base.html.twig #}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>{% block title %}{% trans %}Temperature{% endtrans %}{% endblock %}</title>
-
-        <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
-        <link href="{{ asset('font/bootstrap-icons.min.css', 'bootstrap-icon') }}" rel="stylesheet">        
-        {% block stylesheets %}{% endblock %}
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="generator" content="">
+        
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        
+        <title>{% block title %}Temperature{% endblock %}</title>
+        {% block stylesheets %}
+            <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
+            <link href="{{ asset('font/bootstrap-icons.css', 'bootstrap-icon') }}" rel="stylesheet">
+        {% endblock %}
+        {% block javascripts_header %}{% endblock %}
     </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            {% include '_menu.html.twig' %}
-        </nav>
-        {% block modal %}{% endblock %}
-        <div class="content container-fluid">
-            {% block body %}{% endblock %}
-        </div>
-        <script src="{{ asset('jquery-3.6.4.min.js', 'jquery') }}"></script>
-        <script src="{{ asset('loadingoverlay.min.js', 'jquery-loading-overlay') }}"></script>
-        <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
-        {% block javascripts %}{% endblock %}
+    <body class="d-flex flex-column min-vh-100">
+        <header class="mb-3">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand text-decoration-none" href="{{ path('app_index') }}">
+                        <i class="bi bi-thermometer-half"></i> Temperature
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Navigation menu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    {% include '_menu.html.twig' %}
+                </div>
+            </nav>
+            <nav aria-label="breadcrumb" class="bg-dark-subtle shadow border-bottom border-danger-subtle" style="--bs-breadcrumb-divider: '>';">
+                <ol class="breadcrumb m-0 p-2">
+                    <li class="breadcrumb-item"><a href="{{ path('app_index') }}" class="text-decoration-none"><i class="bi bi-house"></i> {{ 'home'|trans({},'label') }}</li></a>
+                    {% block breadcrumb %}{% endblock %}
+                </ol>
+            </nav>
+        </header>
+        <main class="mb-3">
+            {% include '_flash.html.twig' %}
+            <div class="container-fluid">
+                {% block body %}{% endblock %}
+            </div>
+        </main>
+        <footer class="mt-auto">
+            <nav class="navbar navbar-expand-lg navbar-dark sticky-bottom bg-dark">
+                <div class="container-fluid justify-content-end">
+                    <div class="text-end text-light">
+                        <small><i class="bi bi-bookmark"></i> {{ 'version'|trans({},'label') }}: {{ app.request.server.get('APP_VERSION') }}</small>
+                    </div>
+                </div>
+            </nav>
+        </footer>
+        {% block javascripts_footer %}
+            
+            <script src="{{ asset('jquery.min.js', 'jquery') }}"></script>
+            <script src="{{ asset('loadingoverlay.min.js', 'loading') }}"></script>
+            <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
+            <script src="{{ asset('js/app.js') }}"></script>
+            <script>
+                const LOADING_MESSAGE="{{ 'message.loading'|trans }}";                
+            </script>
+            
+        {% endblock %}
     </body>
 </html>

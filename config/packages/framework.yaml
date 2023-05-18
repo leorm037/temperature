@@ -9,9 +9,9 @@ framework:
                 base_path: '/bootstrap-icons-1.10.5'
             jquery:
                 base_path: '/jquery-3.6.4'
-            jquery-loading-overlay:
+            loading:
                 base_path: '/jquery-loading-overlay-2.1.7/dist'
-            chart:
+            chartjs:
                 base_path: '/chart.js-4.3.0/dist'
                 
     secret: '%env(APP_SECRET)%'

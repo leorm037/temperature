@@ -1,0 +1,149 @@
+{# templates/temperature/_modalDetail.html.twig #}
+<div class="modal fade" id="modalDetalhe" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title me-auto">{{ 'lalbel.detail'|trans({},'label') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'label.close'|trans({},'label') }}"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                    <div>
+                        <i class="bi bi-calendar"></i> <span id="modalDateTime"></span>
+                    </div>
+                    <div>
+                        <i class="bi bi-router"></i> Isp: <span id="modalIsp"></span>
+                    </div>
+                    <div>
+                        <i class="bi bi-globe2"></i> Result URL: <span id="modalResultUrl"></span>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="tabDetail" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="server-tab" data-bs-toggle="tab" data-bs-target="#server" type="button" role="tab" aria-controls="server" aria-selected="true"><i class="bi bi-hdd-network"></i> Server</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab" aria-controls="download" aria-selected="fase"><i class="bi bi-speedometer2"></i> Download</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab" aria-controls="upload" aria-selected="false"><i class="bi bi-speedometer2"></i> Upload</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="ping-tab" data-bs-toggle="tab" data-bs-target="#ping" type="button" role="tab" aria-controls="ping" aria-selected="false"><i class="bi bi-stopwatch"></i> Ping</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="interface-tab" data-bs-toggle="tab" data-bs-target="#interface" type="button" role="tab" aria-controls="interface" aria-selected="false"><i class="bi bi-ethernet"></i> Interface</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="tabDetailContent">
+                    <div class="tab-pane fade show active" id="server" role="tabpanel" aria-labelledby="server-tab">
+                        <table class="table table-hover table-border">
+                            <tbody>
+                                <tr>
+                                    <td><i class="bi bi-hdd-network"></i> Server IP: </td>
+                                    <td class="text-end" id="modalServerIp"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-hdd-network"></i> Server name: </td>
+                                    <td class="text-end" id="modalServerName"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-hdd-network"></i> Server location: </td>
+                                    <td class="text-end" id="modalServerLocation"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-hdd-network"></i> Server country: </td>
+                                    <td class="text-end" id="modalServerCountry"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-hdd-network"></i> Server selected: </td>
+                                    <td class="text-end" id="modalServerSelected"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="download" role="tabpanel" aria-labelledby="download-tab">
+                        <table class="table table-hover table-border">
+                            <tbody>
+                                <tr>
+                                    <td><i class="bi bi-speedometer2"></i> Download Bandwidth:</td>
+                                    <td class="text-end" id="modalDownloadBandwidth"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-download"></i> Download bytes:</td>
+                                    <td class="text-end" id="modalDownloadBytes"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-stopwatch"></i> Download elapsed:</td>
+                                    <td class="text-end" id="modalDownloadElapsed"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="upload" role="tabpanel" aria-labelledby="upload-tab">
+                        <table class="table table-hover table-border">
+                            <tbody>
+                                <tr>
+                                    <td><i class="bi bi-speedometer2"></i> Upload Bandwidth: </td>
+                                    <td class="text-end" id="modalUploadBandwidth"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-upload"></i> Upload bytes: </td>
+                                    <td class="text-end" id="modalUploadBytes"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-stopwatch"></i> Upload elapsed: </td>
+                                    <td class="text-end" id="modalUploadElapsed"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="ping" role="tabpanel" aria-labelledby="ping-tab">
+                        <table class="table table-hover table-border">
+                            <tbody>
+                                <tr>
+                                    <td><i class="bi bi-stopwatch"></i> Ping jitter:</td>
+                                    <td class="text-end" id="modalPingJitter"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-stopwatch"></i> Ping latency:</td>
+                                    <td class="text-end" id="modalPingLatency"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-box"></i> PacketLoss: </td>
+                                    <td class="text-end" id="modalPacketLoss"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="interface" role="tabpanel" aria-labelledby="interface-tab">
+                        <table class="table table-hover table-border">
+                            <tbody>
+                                <tr>
+                                    <td><i class="bi bi-ethernet"></i> Interface internal ip: </td>
+                                    <td class="text-end" id="modalInterfaceInternalIp"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-ethernet"></i> Interface name: </td>
+                                    <td class="text-end" id="modalInterfaceName"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-ethernet"></i> Interface Mac Addr: </td>
+                                    <td class="text-end" id="modalInterfaceMacAddr"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-ethernet"></i> Interface VPN: </td>
+                                    <td class="text-end" id="modalInterfaceVpn"></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="bi bi-ethernet"></i> Interface External Ip: </td>
+                                    <td class="text-end" id="modalInterfaceExternalIp"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div
+</div>
