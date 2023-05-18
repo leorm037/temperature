@@ -84,7 +84,7 @@ function graphicConstruct(tempArray) {
                                 modalWindDirection.text(data.result.windDirection);                                            //06
                                 modalWindVelocity.text(parseFloat(data.result.windVelocity).toLocaleString(LOCALE) + " km/h"); //07
                                 modalHumidity.text(parseFloat(data.result.humidity).toLocaleString(LOCALE) + "%");             //08
-                                modalWeatherCondition.html(data.result.weatherCondition + " <img src='/realistic/70px/" + data.result.icon + ".png'>");                                      //09
+                                modalWeatherCondition.html(data.result.weatherCondition + " <img src='" + BASE_URL + "/realistic/70px/" + data.result.icon + ".png'>");                                      //09
                                 modalPressure.text(parseFloat(data.result.pressure).toLocaleString(LOCALE) + " hPa");          //10
                             } else {
                                 console.log("Fail",dateTimeLabel);
