@@ -77,6 +77,18 @@ class TemperatureRepository extends ServiceEntityRepository
         ;
     }
 
+    public function lastTemperature(): float
+    {
+        return $this->createQueryBuilder('t')
+                        ->select('t.temperature')
+                        ->setMaxResults(1)
+                        ->orderBy('t.dateTime', 'DESC')
+                        ->getQuery()
+                        ->enableResultCache(300)
+                        ->getSingleScalarResult()
+        ;
+    }
+
 //    /**
 //     * @return Temperature[] Returns an array of Temperature objects
 //     */

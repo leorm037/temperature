@@ -56,5 +56,17 @@ class TemperatureController extends AbstractController
                     'result' => $temperature
         ]);
     }
+    
+    public function jsonLastTemperature(): JsonResponse
+    {
+        $temperature = $this->temperatureRepository->lastTemperature();
+        
+        $message = (null == $temperature) ? 'fail' : 'success';
+        
+        return $this->json([
+            'message' => $message,
+            'result' => $temperature
+        ]);
+    }
 
 }

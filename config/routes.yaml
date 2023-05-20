@@ -25,9 +25,9 @@ app_temperature_json_days:
     methods: POST
     
 app_temperature_json_last_temperature:
-    path: /json/days
-    controller: App\Controller\TemperatureController::jsonDays
-    methods: POST
+    path: /json/last-temperature
+    controller: App\Controller\TemperatureController::jsonLastTemperature
+    methods: GET
     
 app_temperature_json_detail:
     path: /json/detail

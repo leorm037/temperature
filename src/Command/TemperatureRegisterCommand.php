@@ -9,6 +9,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\EnvVarProcessorInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
             name: 'temperature:register',
@@ -21,14 +23,17 @@ class TemperatureRegisterCommand extends Command
     private const TEMP_GPU_COMMAND = '/usr/bin/vcgencmd measure_temp';
 
     private string $urlApiTokenClimaTempo;
+    private KernelInterface $kernel;
     private TemperatureRepository $temperatureRepository;
 
     public function __construct(
+            KernelInterface $kernel,
             TemperatureRepository $temperatureRepository,
             $urlApiTokenClimaTempo
     )
     {
         $this->temperatureRepository = $temperatureRepository;
+        $this->kernel = $kernel;
         $this->urlApiTokenClimaTempo = $urlApiTokenClimaTempo;
         parent::__construct();
     }
@@ -76,6 +81,10 @@ class TemperatureRegisterCommand extends Command
 
     private function cpu()
     {
+        if ("dev" === $this->kernel->getEnvironment()) {
+            return floatval(random_int(31, 35));
+        }
+        
         $tempCpu = shell_exec(self::TEMP_CPU_COMMAND);
 
         return $tempCpu / 1000;
@@ -83,6 +92,10 @@ class TemperatureRegisterCommand extends Command
 
     private function gpu()
     {
+        if ("dev" === $this->kernel->getEnvironment()) {
+            return floatval(random_int(30, 34));
+        }
+        
         $tempGpu = shell_exec(self::TEMP_GPU_COMMAND);
 
         return str_replace(['temp=', "'C"], '', $tempGpu);

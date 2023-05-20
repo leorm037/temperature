@@ -1,5 +1,5 @@
 {# templates/_menu.html.twig #}
-<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+<div class="collapse navbar-collapse" id="navbarMenu">
     <ul class="ms-auto navbar-nav">
         <li class="nav-item">
             <a href="{{ path('app_temperature_days', {"days": 1}) }}" data-loading="true" class="nav-link{% if app.request.get('_route') starts with 'app_temperature_days' and app.request.get('days') == 1 %} active{% endif %}">1 {{ 'day'|trans({},'label') }}</a>

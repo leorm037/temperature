@@ -25,7 +25,14 @@
         const LOCALE = '{{ app.request.locale|replace({'_':'-'}) }}';
         const URL_JSON_DAYS = "{{ url('app_temperature_json_days') }}";
         const URL_JSON_DETAIL = "{{ url('app_temperature_json_detail') }}";
+        const URL_JSON_LAST_TEMPERATURE = "{{ url('app_temperature_json_last_temperature') }}";
         const BASE_URL = "{{ app.request.schemeAndHttpHost ~ app.request.baseUrl }}";
         graphicShow({{ days }});
+        updateLastTemperature();
+        
+        setInterval(function(){
+            graphicShow({{ days }});
+            updateLastTemperature();
+        },300000);
     </script>
 {% endblock %}
