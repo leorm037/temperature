@@ -3,7 +3,7 @@
     "type": "project",
     "license": "MIT",
     "description": "",
-    "version": "0.1.0-dev",
+    "version": "0.5.0-rc",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "authors": [
