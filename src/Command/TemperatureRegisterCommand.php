@@ -72,7 +72,7 @@ class TemperatureRegisterCommand extends Command
 
     private function climaTempo(): array
     {
-        $tempClimaTempoJson = file_get_contents($this->urlApiTokenClimaTempo);
+        $tempClimaTempoJson = file_get_contents($this->urlApiTokenClimaTempo . "&" . rand());
         $data = json_decode($tempClimaTempoJson, true);
         $climaTempo = $data['data'];
 

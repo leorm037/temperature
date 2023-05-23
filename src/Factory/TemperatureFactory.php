@@ -12,7 +12,7 @@ class TemperatureFactory
     {
         $temperature = new Temperature();
 
-        $dateTime = new DateTime($json['date']);
+        $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $json['date']);
 
         return $temperature
                         ->setDateTime($dateTime)
