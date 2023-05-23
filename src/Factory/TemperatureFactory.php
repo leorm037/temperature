@@ -12,7 +12,7 @@ class TemperatureFactory
     {
         $temperature = new Temperature();
 
-        $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $json['date']);
+        $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $json['date'], new \DateTimeZone("America/Sao_Paulo"));
 
         return $temperature
                         ->setDateTime($dateTime)
