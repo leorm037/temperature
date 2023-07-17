@@ -2,6 +2,7 @@ home: 'Página inicial'
 version: Versão
 day: dia
 days: dias
+Date: Data
 label.close: Fechar
 label.detail: Detalhe
 temperature: Temperatura

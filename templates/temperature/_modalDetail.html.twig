@@ -7,22 +7,23 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'label.close'|trans({},'label') }}"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
-                    <div>
-                        <i class="bi bi-calendar"></i> <span id="modalDateTime"></span>
-                    </div>
-                    <div>
-                        <i class="bi bi-thermometer-half"></i> {{ 'temperature'|trans({}, 'label') }}: <span id="modalTemperature"></span>
-                    </div>
-                    <div>
-                        <i class="bi bi-thermometer-half"></i> {{ 'sensation'|trans({}, 'label') }}: <span id="modalSensation"></span>
-                    </div>
-                </div>
                 <table class="table table-hover table-border">
                     <tbody>
                         <tr>
-                            <td style="vertical-align: middle;"><i class="bi bi-asterisk"></i> {{ 'weather condition'|trans({}, 'label') }}: </td>
+                            <td style="vertical-align: middle;"><i class="bi bi-asterisk"></i> {{ 'weather condition'|trans({}, 'label') }}</td>
                             <td class="text-end" id="modalWeatherCondition" style="vertical-align: middle;"></td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-calendar"></i> {{ 'Date'|trans({}, 'label') }}</td>
+                            <td class="text-end" id="modalDateTime"></td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-thermometer-half"></i> {{ 'temperature'|trans({}, 'label') }}</td>
+                            <td class="text-end" id="modalTemperature"></td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-thermometer-half"></i> {{ 'sensation'|trans({}, 'label') }}</td>
+                            <td class="text-end" id="modalSensation"></td>
                         </tr>
                         <tr>
                             <td><i class="bi bi-cpu"></i> CPU: </td>

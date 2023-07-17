@@ -147,7 +147,7 @@ function updateLastTemperature() {
 
         $("#temp-thermometer").text(temperature + "ºC");
 
-        if (temperature <= 10.00) {
+        if (temperature <= 15.00) {
             $("#icon-thermometer").removeAttr('class').attr('class', 'bi bi-thermometer-snow');
         } else if (temperature <= 20) {
             $("#icon-thermometer").removeAttr('class').attr('class', 'bi bi-thermometer-low');
