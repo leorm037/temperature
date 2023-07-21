@@ -1,0 +1,24 @@
+{# templates/token/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Token{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h4 my-0">Token</h1>
+        </div>
+        <div class="card-body">
+            {{ form_row(form.paramValue) }}
+        </div>
+        <div class="card-footer bg-primary-subtle bg-gradient text-end">
+            <button type="submit" class="btn btn-primary bg-gradient btn-sm">{{ 'btn.save'|trans({}, 'label') }}</button>
+            <button type="reset" class="btn btn-secondary bg-gradient btn-sm">{{ 'btn.reset'|trans({}, 'label') }}</button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

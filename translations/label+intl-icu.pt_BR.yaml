@@ -12,3 +12,5 @@ pressure: Pressão
 'wind velocity': 'Velocidade do vento'
 'wind direction': 'Direção do vento'
 'weather condition': 'Condição do clima'
+btn.save: Salvar
+btn.reset: Limpar

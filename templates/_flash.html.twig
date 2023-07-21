@@ -1,1 +1,31 @@
 {# templates/_flash.html.twig #}
+<div class="container-fluid">
+{% for class, messages in app.flashes %}
+    {% for message in messages %}
+        {% if class == 'primary' %}
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        {% elseif class == 'secondary' %}
+            <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+        {% elseif class == 'success' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill"></i> 
+        {% elseif class == 'danger' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> 
+        {% elseif class == 'warning' %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> 
+        {% elseif class == 'info' %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="bi bi-info-circle"></i> 
+        {% elseif class == 'light' %}
+            <div class="alert alert-light alert-dismissible fade show" role="alert">
+        {% elseif class == 'dark' %}
+            <div class="alert alert-dark alert-dismissible fade show" role="alert">
+        {% endif %}
+                {{ message|raw }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ 'close'|trans([],'label') }}"></button>
+            </div>
+    {% endfor %}
+{% endfor %}
+</div>

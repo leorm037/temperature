@@ -4,7 +4,22 @@
 #        namespace: App\Controller
 #    type: attribute
 
-#[Route('/temperature', name: 'app_temperature')]
+app_configuration_controller:
+    resource: "routes/configuration.yaml"
+    prefix: /configuration
+
+app_country_controller:
+    resource: "routes/country.yaml"
+    prefix: /country
+
+app_city_controller:
+    resource: "routes/city.yaml"
+    prefix: /city
+    
+app_token_controller:
+    resource: "routes/token.yaml"
+    prefix: /token
+
 app_index:
     path: /
     controller: App\Controller\TemperatureController::index
