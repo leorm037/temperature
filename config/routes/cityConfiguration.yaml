@@ -1,0 +1,14 @@
+app_city_configuration_index:
+    path: /
+    controller: App\Controller\CityConfigurationController::index
+    methods: GET|POST
+
+app_city_configuration_states:
+    path: /state_json
+    controller: App\Controller\CityConfigurationController::stateJson
+    methods: POST
+
+app_city_configuration_cities:
+    path: /city_json
+    controller: App\Controller\CityConfigurationController::cityJson
+    methods: POST

@@ -12,13 +12,13 @@ app_country_controller:
     resource: "routes/country.yaml"
     prefix: /country
 
-app_city_controller:
-    resource: "routes/city.yaml"
-    prefix: /city
+app_city_configuration_controller:
+    resource: "routes/cityConfiguration.yaml"
+    prefix: /cityConfiguration
     
-app_token_controller:
-    resource: "routes/token.yaml"
-    prefix: /token
+app_token_configuration_controller:
+    resource: "routes/tokenConfiguration.yaml"
+    prefix: /tokenConfiguration
 
 app_index:
     path: /

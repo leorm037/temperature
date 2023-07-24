@@ -1,4 +1,0 @@
-app_city_index:
-    path: /
-    controller: App\Controller\CityController::index
-    methods: GET|POST

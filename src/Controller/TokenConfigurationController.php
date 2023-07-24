@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TokenController extends AbstractController
+class TokenConfigurationController extends AbstractController
 {
 
     private ConfigurationRepository $configurationRepository;
@@ -31,7 +31,6 @@ class TokenController extends AbstractController
         if (null === $token) {
             $token = new Configuration();
             $token->setParamName('token');
-            $token->setParamValue('token');
             $this->configurationRepository->save($token, true);
         }
 
@@ -41,12 +40,12 @@ class TokenController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->configurationRepository->save($token, true);
 
-            $this->addFlash('success', $this->translator->trans('message.token.update.success'));
+            $this->addFlash('success', $this->translator->trans('message.tokenConfiguration.update.success'));
 
             return $this->redirectToRoute('app_token_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('token/index.html.twig', [
+        return $this->render('tokenConfiguration/index.html.twig', [
                     'token' => $token,
                     'form' => $form,
         ]);

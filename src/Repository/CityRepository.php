@@ -33,9 +33,26 @@ class CityRepository extends ServiceEntityRepository
 
     /**
      * 
-     * @param string $country
+     * @return array<int,string>
      */
-    public function findStatesByCountry(string $country)
+    public function listCountry()
+    {
+        return $this->createQueryBuilder('c')
+                        ->select('c.country')
+                        ->groupBy('c.country')
+                        ->orderBy('c.country', 'ASC')
+                        ->getQuery()
+                        ->enableResultCache(300)
+                        ->getSingleColumnResult()
+        ;
+    }
+
+    /**
+     * 
+     * @param string $country
+     * @return array<int,string>
+     */
+    public function listStateFromCountry(string $country)
     {
         return $this->createQueryBuilder('c')
                         ->select('c.state')
@@ -44,6 +61,24 @@ class CityRepository extends ServiceEntityRepository
                         ->groupBy('c.state')
                         ->orderBy('c.state', 'ASC')
                         ->getQuery()
+                        ->enableResultCache(300)
+                        ->getSingleColumnResult()
+        ;
+    }
+
+    /**
+     * 
+     * @param string $state
+     * @return City[]
+     */
+    public function listCityFromState(string $state)
+    {
+        return $this->createQueryBuilder('c')
+                        ->where('c.state = :state')
+                        ->setParameter('state', $state)
+                        ->orderBy('c.name', 'ASC')
+                        ->getQuery()
+                        ->enableResultCache(300)
                         ->getResult()
         ;
     }
@@ -53,14 +88,17 @@ class CityRepository extends ServiceEntityRepository
      * @param string $state
      * @return City[]
      */
-    public function findByState(string $state)
+    public function findByCountryStateIdCity(?string $country, ?string $state, ?string $idCity)
     {
         return $this->createQueryBuilder('c')
-                        ->where('c.state = :state')
+                        ->where('c.country = :country')
+                        ->setParameter('country', $country)
+                        ->andWhere('c.state = :state')
                         ->setParameter('state', $state)
-                        ->orderBy('c.name', 'ASC')
+                        ->andWhere('c.id = :idCity')
+                        ->setParameter('idCity', $idCity)
                         ->getQuery()
-                        ->getResult()
+                        ->getOneOrNullResult()
         ;
     }
 

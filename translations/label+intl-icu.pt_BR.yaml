@@ -14,3 +14,9 @@ pressure: Pressão
 'weather condition': 'Condição do clima'
 btn.save: Salvar
 btn.reset: Limpar
+'Select country abbreviation': 'Selecione a abreviação do país'
+'Select state abbreviation': 'Selecione a abreviação do estado'
+'Select city': 'Selecione a cidade'
+Country: País
+State: Estado
+City: Cidade

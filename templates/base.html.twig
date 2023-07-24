@@ -15,10 +15,16 @@
         
         <title>{% block title %}Temperature{% endblock %}</title>
         {% block stylesheets %}
+            
             <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
             <link href="{{ asset('font/bootstrap-icons.css', 'bootstrap-icon') }}" rel="stylesheet">
         {% endblock %}
-        {% block javascripts_header %}{% endblock %}
+        {% block javascripts_header %}
+            
+            <script>
+                const BASE_URL = "{{ app.request.baseUrl }}";
+            </script>
+        {% endblock %}
     </head>
     <body class="d-flex flex-column min-vh-100">
         <header class="mb-3">
@@ -62,9 +68,8 @@
             <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
             <script src="{{ asset('js/app.js') }}"></script>
             <script>
-                const LOADING_MESSAGE="{{ 'message.loading'|trans }}";                
+                const LOADING_MESSAGE="{{ 'message.loading'|trans }}";
             </script>
-            
         {% endblock %}
     </body>
 </html>

@@ -1,2 +1,4 @@
 message.loading: __message.loading
-message.token.update.success: Token atualizado com sucesso!
+message.tokenConfiguration.update.success: Token atualizado com sucesso!
+message.cityConfiguration.update.success: Cidade atualizada com sucesso!
+message.cityConfiguration.update.error: Selecione uma cidade.

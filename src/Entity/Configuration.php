@@ -27,7 +27,7 @@ class Configuration extends AbstractEntity
     #[Assert\NotBlank]
     private ?string $paramName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $paramValue = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
