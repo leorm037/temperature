@@ -2,125 +2,75 @@
 
 namespace App\Controller;
 
-use App\Entity\City;
 use App\Entity\Configuration;
-use App\Factory\CityFactory;
-use App\Repository\CityRepository;
+use App\Form\ConfigurationType;
 use App\Repository\ConfigurationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
-class CityConfigurationController extends AbstractController
+class ConfigurationController extends AbstractController
 {
-
-    private CityRepository $cityRepository;
-    private ConfigurationRepository $configurationRepository;
-    private TranslatorInterface $translator;
-
-    public function __construct(
-            CityRepository $cityRepository,
-            ConfigurationRepository $configurationRepository,
-            TranslatorInterface $translator
-    )
+    
+    public function index(ConfigurationRepository $configurationRepository): Response
     {
-        $this->cityRepository = $cityRepository;
-        $this->configurationRepository = $configurationRepository;
-        $this->translator = $translator;
+        return $this->render('configuration/index.html.twig', [
+            'configurations' => $configurationRepository->findAll(),
+        ]);
     }
 
-    public function index(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        /** @var Configuration $cityConfiguration */
-        $cityConfiguration = $this->configurationRepository->findByName('city');
-        
-        if (null == $cityConfiguration) {
-            $cityConfiguration = new Configuration();
-            $cityConfiguration->setParamName('city');
-            $this->configurationRepository->save($cityConfiguration, true);
-        }
-        
-        $countries = $this->cityRepository->listCountry();
+        $configuration = new Configuration();
+        $form = $this->createForm(ConfigurationType::class, $configuration);
+        $form->handleRequest($request);
 
-        $city = new City();
-        $states = [];
-        $cities = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($configuration);
+            $entityManager->flush();
 
-        if (null != $cityConfiguration->getParamValue()) {
-            $city = $this->cityRepository->find($cityConfiguration->getParamValue());
-            $states = $this->cityRepository->listStateFromCountry($city->getCountry());
-            $cities = $this->cityRepository->listCityFromState($city->getState());
+            return $this->redirectToRoute('app_configuration_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if ('GET' === $request->getMethod()) {
-            return $this->render('cityConfiguration/index.html.twig', [
-                        'city' => $city,
-                        'countries' => $countries,
-                        'states' => $states,
-                        'cities' => $cities,
-            ]);
-        }
-
-        $countryPost = $request->request->get('country');
-        $statePost = $request->request->get('state');
-        $cityPost = $request->request->get('city');
-
-        $cityDatabase = $this->cityRepository->findByCountryStateIdCity($countryPost, $statePost, $cityPost);
-
-        if (null == $cityDatabase) {
-            $this->addFlash('danger', $this->translator->trans('message.cityConfiguration.update.error'));
-
-            return $this->render('cityConfiguration/index.html.twig', [
-                        'city' => $city,
-                        'countries' => $countries,
-                        'states' => $states,
-                        'cities' => $cities,
-            ]);
-        }
-
-        $cityConfiguration->setParamValue($cityDatabase->getId());
-
-        $this->configurationRepository->save($cityConfiguration, true);
-
-        $this->addFlash('success', $this->translator->trans('message.cityConfiguration.update.success'));
-
-        return $this->redirectToRoute('app_city_configuration_index', [], Response::HTTP_SEE_OTHER);
+        return $this->render('configuration/new.html.twig', [
+            'configuration' => $configuration,
+            'form' => $form,
+        ]);
     }
 
-    public function stateJson(Request $request): JsonResponse
+    public function show(Configuration $configuration): Response
     {
-        $country = $request->request->get('countryAbbreviation');
-
-        $states = $this->cityRepository->listStateFromCountry($country);
-
-        $message = (null != $states) ? 'success' : 'fail';
-
-        return $this->json(['message' => $message, 'states' => $states], 200);
+        return $this->render('configuration/show.html.twig', [
+            'configuration' => $configuration,
+        ]);
     }
 
-    public function cityJson(Request $request): JsonResponse
+    public function edit(Request $request, Configuration $configuration, EntityManagerInterface $entityManager): Response
     {
-        $state = $request->request->get('stateAbbreviation');
+        $form = $this->createForm(ConfigurationType::class, $configuration);
+        $form->handleRequest($request);
 
-        $cities = $this->cityRepository->listCityFromState($state);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
 
-        $message = (null != $cities) ? 'success' : 'fail';
-
-        return $this->json(['message' => $message, 'cities' => $cities], 200);
-    }
-
-    private function getCityClimaTempo()
-    {
-        $citiesJson = file_get_contents("http://apiadvisor.climatempo.com.br/api/v1/locale/city?country=BR&token=token");
-        $cities = json_decode($citiesJson);
-
-        $citiesCount = count($cities);
-
-        for ($i = 0; $i < $citiesCount; $i++) {
-            $city = CityFactory::build($cities[$i]);
-            $this->cityRepository->save($city, ($i == $citiesCount - 1) ? true : false);
+            return $this->redirectToRoute('app_configuration_index', [], Response::HTTP_SEE_OTHER);
         }
+
+        return $this->render('configuration/edit.html.twig', [
+            'configuration' => $configuration,
+            'form' => $form,
+        ]);
+    }
+
+    public function delete(Request $request, Configuration $configuration, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$configuration->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($configuration);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_configuration_index', [], Response::HTTP_SEE_OTHER);
     }
 }
