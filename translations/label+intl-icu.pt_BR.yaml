@@ -1,22 +1,26 @@
-home: 'Página inicial'
-version: Versão
-day: dia
-days: dias
-Date: Data
-label.close: Fechar
-label.detail: Detalhe
-temperature: Temperatura
-sensation: Sensação
-humidity: Humidade
-pressure: Pressão
-'wind velocity': 'Velocidade do vento'
-'wind direction': 'Direção do vento'
-'weather condition': 'Condição do clima'
-btn.save: Salvar
-btn.reset: Limpar
+'Select city': 'Selecione a cidade'
 'Select country abbreviation': 'Selecione a abreviação do país'
 'Select state abbreviation': 'Selecione a abreviação do estado'
-'Select city': 'Selecione a cidade'
-Country: País
-State: Estado
+'weather condition': 'Condição do clima'
+'wind direction': 'Direção do vento'
+'wind velocity': 'Velocidade do vento'
 City: Cidade
+Country: País
+Date: Data
+State: Estado
+btn.reset: Limpar
+btn.save: Salvar
+btn.search: Pesquisar
+day: dia
+days: dias
+home: 'Página inicial'
+humidity: Humidade
+label.close: Fechar
+label.detail: Detalhe
+pressure: Pressão
+sensation: Sensação
+temperature: Temperatura
+version: Versão
+'Total records found': 'Total de registros encontrados: {total}'
+Select: Selecionar
+Actions: Ações

@@ -1,0 +1,15 @@
+app_city_index:
+    path: /
+    controller: App\Controller\CityController::index
+    methods: GET|POST
+
+app_city_states:
+    path: /states
+    controller: App\Controller\CityController::statesJson
+    methods: POST
+
+app_city_select:
+    path: /select
+    controller: App\Controller\CityController::selectCity
+    methods: POST
+

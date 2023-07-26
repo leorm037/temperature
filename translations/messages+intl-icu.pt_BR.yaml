@@ -1,4 +1,3 @@
 message.loading: __message.loading
-message.tokenConfiguration.update.success: Token atualizado com sucesso!
-message.cityConfiguration.update.success: Cidade atualizada com sucesso!
-message.cityConfiguration.update.error: Selecione uma cidade.
+'No record found': 'Nenhum registro encontrado'
+'message.city.select.success': 'A cidade {city}-{state}, {country}, foi selecionada com sucesso!'

@@ -26,11 +26,11 @@ class TokenConfigurationController extends AbstractController
 
     public function index(Request $request): Response
     {
-        $token = $this->configurationRepository->findByName('token');
+        $token = $this->configurationRepository->findByName(ConfigurationRepository::CONFIGURATION_TOKEN);
 
         if (null === $token) {
             $token = new Configuration();
-            $token->setParamName('token');
+            $token->setParamName(ConfigurationRepository::CONFIGURATION_TOKEN);
             $this->configurationRepository->save($token, true);
         }
 

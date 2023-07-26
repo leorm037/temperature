@@ -31,6 +31,27 @@ class CityRepository extends ServiceEntityRepository
         }
     }
 
+    public function select(int $id): City
+    {
+        /** @var City $citySelected */
+        $citySelected = $this->createQueryBuilder('c')
+                ->where('c.selected = 1')
+                ->getQuery()
+                ->getOneOrNullResult()
+        ;
+
+        if (null != $citySelected) {
+            $citySelected->setSelected(false);
+            $this->save($citySelected);
+        }
+
+        $city = $this->find($id);
+        $city->setSelected(true);
+        $this->save($city, true);
+
+        return $city;
+    }
+
     /**
      * 
      * @return array<int,string>
@@ -71,14 +92,35 @@ class CityRepository extends ServiceEntityRepository
      * @param string $state
      * @return City[]
      */
-    public function listCityFromState(string $state)
+    public function listCityFromCountryAndState(string $country, string $state, ?string $name = null)
     {
-        return $this->createQueryBuilder('c')
-                        ->where('c.state = :state')
-                        ->setParameter('state', $state)
+        $query = $this->createQueryBuilder('c')
+                ->where('c.state = :state')
+                ->setParameter('state', $state)
+        ;
+
+        if (null != $name) {
+            $query->andWhere('c.name like :name')
+                    ->setParameter('name', '%' . $name . '%')
+            ;
+        }
+
+        return $query->orWhere('c.selected = true')
                         ->orderBy('c.name', 'ASC')
                         ->getQuery()
                         ->enableResultCache(300)
+                        ->getResult()
+        ;
+    }
+
+    /**
+     * @return City[]
+     */
+    public function listCitySelected()
+    {
+        return $this->createQueryBuilder('c')
+                        ->where('c.selected = 1')
+                        ->getQuery()
                         ->getResult()
         ;
     }

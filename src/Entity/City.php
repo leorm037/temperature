@@ -37,6 +37,9 @@ class City extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTimeInterface $updatedAt = null;
 
+    #[ORM\Column(options: ['default' => 0])]
+    private bool $selected = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class City extends AbstractEntity
     public function setUpdatedAt(DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function isSelected(): bool
+    {
+        return $this->selected;
+    }
+
+    public function setSelected(bool $selected): static
+    {
+        $this->selected = $selected;
 
         return $this;
     }

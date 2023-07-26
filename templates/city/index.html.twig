@@ -1,0 +1,119 @@
+{# templates/city/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: {{ 'City'|trans({}, 'label') }}{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h4 my-0">{{ 'City'|trans({}, 'label') }}</h1>
+        </div>
+        <form method="post" name="citySearchForm" action="{{ path('app_city_index') }}">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="country" class="form-label">{{ 'Country'|trans({}, 'label') }}</label>
+                    <select name="country" id="country" class="form-select" required="true">
+                        <option value>{{ 'Select country abbreviation'|trans({}, 'label') }}</option>
+                        {% for country in countries %}
+                            <option value="{{ country }}"{% if country == cityForm.country %} selected{% endif %}>{{ country }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="state" class="form-label">{{ 'State'|trans({}, 'label') }}</label>
+                    <select name="state" id="state" class="form-select" required="true">
+                        {% if states %}
+                            <option value>{{ 'Select state abbreviation'|trans({}, 'label') }}</option>
+                        {% endif %}
+                        {% for state in states %}
+                            <option value="{{ state }}"{% if state == cityForm.state %} selected{% endif %}>{{ state }}</option>
+                        {% else %}
+                            <option value>{{ 'Select country abbreviation'|trans({}, 'label') }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">{{ 'City'|trans({}, 'label') }}</label>
+                    <input type="text" name="name" id="name" class="form-control" value="{{ cityForm.name }}">
+                </div>
+            </div>
+            <div class="card-footer bg-primary-subtle bg-gradient text-end border-bottom border-primary-subtle">
+                <button type="submit" class="btn btn-primary bg-gradient btn-sm">{{ 'btn.search'|trans({}, 'label') }}</button>
+            </div>
+        </form>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{{ 'Name'|trans({}, 'label') }}</th>
+                            <th>{{ 'State'|trans({}, 'label') }}</th>
+                            <th>{{ 'Country'|trans({}, 'label') }}</th>
+                            <th>{{ 'Selected'|trans({}, 'label') }}</th>
+                            <th class="text-center">{{ 'Actions'|trans({}, 'label') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for city in cities %}
+                            <tr{% if city.selected %} class="table-primary"{% endif %}>
+                                <th>{{ city.id }}</th>
+                                <td>{{ city.name }}</td>
+                                <td>{{ city.state }}</td>
+                                <td>{{ city.country }}</td>
+                                <td>{{ (city.selected) ? 'Yes'|trans({}, 'label') : 'No'|trans({}, 'label') }}</td>
+                                <td class="text-center">
+                                    {% if not city.selected %}
+                                        <form method="POST" action="{{ path('app_city_select') }}">
+                                            <input type="hidden" name="_csrf" value="{{ csrf_token('select' ~ city.id) }}">
+                                            <input type="hidden" name="city" value="{{ city.id }}">
+                                            <button class="btn btn-sm btn-primary" type="submit">{{ 'Select'|trans({}, 'label') }}</button>
+                                        </form>
+                                    {% else %}
+                                        <button type="button" disabled class="btn btn-sm btn-secondary">{{ 'Select'|trans({}, 'label') }}</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">{{ 'No record found'|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-center">{{ 'Total records found'|trans({total: cities|length}, 'label') }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts_footer %}
+
+    {{ parent() }}
+    <script>
+        $('#country').on('change', function () {
+            let countryValue = $(this).val();
+
+            if ("" != countryValue) {
+                $.post(BASE_URL + '/city/states', {country: countryValue})
+                        .done(function (data) {
+                            if ('success' == data.message) {
+                                $('#state').empty();
+                                $('#state').append(new Option("{{ 'Select state abbreviation'|trans({}, 'label') }}", ""));
+                                $.each(data.states, function (index, value) {
+                                    let option = new Option(value, value);
+                                    $('#state').append($(option));
+                                });
+                            }
+                        })
+                        ;
+            }
+        });
+    </script>
+{% endblock %}

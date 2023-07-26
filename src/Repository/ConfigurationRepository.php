@@ -17,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
 class ConfigurationRepository extends ServiceEntityRepository
 {
 
+    const CONFIGURATION_TOKEN = "token";
+    
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Configuration::class);

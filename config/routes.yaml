@@ -12,9 +12,9 @@ app_country_controller:
     resource: "routes/country.yaml"
     prefix: /country
 
-app_city_configuration_controller:
-    resource: "routes/cityConfiguration.yaml"
-    prefix: /cityConfiguration
+app_city_controller:
+    resource: "routes/city.yaml"
+    prefix: /city
     
 app_token_configuration_controller:
     resource: "routes/tokenConfiguration.yaml"
