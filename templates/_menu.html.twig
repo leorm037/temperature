@@ -19,5 +19,12 @@
         <li class="nav-item">
             <a href="{{ path('app_temperature_days', {"days": 365}) }}" data-loading="true" class="nav-link{% if app.request.get('_route') starts with 'app_temperature_days' and app.request.get('days') == 365 %} active{% endif %}">365 {{ 'days'|trans({},'label') }}</a>
         </li>
+        <li class="nav-item dropstart">
+            <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-gear"></i> {{ 'Configuration'|trans({}, 'label') }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="{{ path('app_city_index') }}"><i class="bi bi-geo"></i> {{ 'City'|trans({}, 'label') }}</a></li>
+                <li><a class="dropdown-item" href="{{ path('app_token_configuration_index') }}"><i class="bi bi-key"></i> Token</a></li>
     </ul>
 </div>

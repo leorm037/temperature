@@ -20,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class TemperatureCityLoadCommand extends Command
 {
 
-    const URL_CITY = "http://apiadvisor.climatempo.com.br/api/v1/locale/city?country=BR&token=";
+    const URL_CITY = "http://apiadvisor.climatempo.com.br/api/v1/locale/city?";
 
     private CityRepository $cityRepository;
     private ConfigurationRepository $configurationRepository;
@@ -28,8 +28,7 @@ class TemperatureCityLoadCommand extends Command
     public function __construct(
             CityRepository $cityRepository,
             ConfigurationRepository $configurationRepository
-    )
-    {
+    ) {
         parent::__construct();
 
         $this->cityRepository = $cityRepository;
@@ -50,10 +49,11 @@ class TemperatureCityLoadCommand extends Command
         $country = strtoupper($input->getArgument('country'));
 
         /** @var Configuration $token */
-        $token = $this->configurationRepository->findByName(ConfigurationRepository::CONFIGURATION_TOKEN);
+        $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
 
         if (null != $token && null != $token->getParamValue()) {
-            $url = self::URL_CITY . $token->getParamValue();
+            $url = self::URL_CITY . "country=" . $country . "&token=" . $token->getParamValue();
+            
             $citiesJson = file_get_contents($url);
             $cities = json_decode($citiesJson);
 

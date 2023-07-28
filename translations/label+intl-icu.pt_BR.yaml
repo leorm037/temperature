@@ -24,3 +24,4 @@ version: Versão
 'Total records found': 'Total de registros encontrados: {total}'
 Select: Selecionar
 Actions: Ações
+help.token.no.show: 'O token gravado não é exibido por questão de segurança.'

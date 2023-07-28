@@ -1,4 +1,4 @@
-app_token_index:
+app_token_configuration_index:
     path: /
     controller: App\Controller\TokenConfigurationController::index
     methods: GET|POST

@@ -15,9 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Configuration[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ConfigurationRepository extends ServiceEntityRepository
-{
-
-    const CONFIGURATION_TOKEN = "token";
+{    
     
     public function __construct(ManagerRegistry $registry)
     {

@@ -19,18 +19,18 @@ class TokenConfigurationController extends AbstractController
     public function __construct(
             ConfigurationRepository $configurationRepository,
             TranslatorInterface $translator
-    ){
+    ) {
         $this->configurationRepository = $configurationRepository;
         $this->translator = $translator;
     }
 
     public function index(Request $request): Response
     {
-        $token = $this->configurationRepository->findByName(ConfigurationRepository::CONFIGURATION_TOKEN);
+        $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
 
         if (null === $token) {
             $token = new Configuration();
-            $token->setParamName(ConfigurationRepository::CONFIGURATION_TOKEN);
+            $token->setParamName(Configuration::CONFIGURATION_TOKEN);
             $this->configurationRepository->save($token, true);
         }
 
@@ -42,7 +42,7 @@ class TokenConfigurationController extends AbstractController
 
             $this->addFlash('success', $this->translator->trans('message.tokenConfiguration.update.success'));
 
-            return $this->redirectToRoute('app_token_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_token_configuration_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('tokenConfiguration/index.html.twig', [

@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Configuration extends AbstractEntity
 {
 
+    const CONFIGURATION_TOKEN = "token";
+    
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]

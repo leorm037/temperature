@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\City;
+use App\Entity\Configuration;
+use App\Helper\ClimaTempoHelper;
 use App\Repository\CityRepository;
+use App\Repository\ConfigurationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,14 +18,17 @@ class CityController extends AbstractController
 
     private CityRepository $cityRepository;
     private TranslatorInterface $translator;
+    private ConfigurationRepository $configurationRepository;
 
     public function __construct(
             CityRepository $cityRepository,
-            TranslatorInterface $translator
+            TranslatorInterface $translator,
+            ConfigurationRepository $configurationRepository
     )
     {
         $this->cityRepository = $cityRepository;
         $this->translator = $translator;
+        $this->configurationRepository = $configurationRepository;
     }
 
     public function index(Request $request): Response
@@ -66,6 +72,9 @@ class CityController extends AbstractController
     {
         $id = $request->request->get('city');
 
+        /** @var Configuration $token */
+        $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
+
         if ($this->isCsrfTokenValid('select' . $id, $request->request->get('_csrf'))) {
             $city = $this->cityRepository->select($id);
 
@@ -74,6 +83,23 @@ class CityController extends AbstractController
                         'state' => $city->getState(),
                         'country' => $city->getCountry()
             ]));
+
+            $result = ClimaTempoHelper::addCity($city, $token->getParamValue());
+
+            $climaTempo = json_decode($result['request']);
+            
+            if ($result['error']) {
+                $this->addFlash('danger', $result['error']);
+            }
+            
+            if (isset($climaTempo->error)) {
+                $this->addFlash('danger', $climaTempo->detail);
+            }
+            
+            if (isset($climaTempo->status)) {
+                $this->addFlash('success', 'Locales: ' . implode(',', $climaTempo->locales));
+            }
+            
         }
 
         return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
