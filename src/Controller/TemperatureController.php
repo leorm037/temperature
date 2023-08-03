@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Temperature.
+ *
+ * (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace App\Controller;
 
 use App\Helper\DateTimeHelper;
@@ -11,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TemperatureController extends AbstractController
 {
-
     private TemperatureRepository $temperatureRepository;
 
     public function __construct(TemperatureRepository $temperatureRepository)
@@ -32,41 +40,40 @@ class TemperatureController extends AbstractController
     public function jsonDays(Request $request): JsonResponse
     {
         $days = intval($request->get('days'));
-        
+
         $temperatures = $this->temperatureRepository->findByDays($days);
 
         return $this->json([
                     'message' => 'success',
-                    'result' => $temperatures
+                    'result' => $temperatures,
         ]);
     }
-    
+
     public function jsonDetail(Request $request): JsonResponse
     {
         $dateString = $request->get('dateTime');
-        
-        $date = DateTimeHelper::dateTimeString($dateString, "America/Sao_Paulo");
-        
+
+        $date = DateTimeHelper::dateTimeString($dateString, 'America/Sao_Paulo');
+
         $temperature = $this->temperatureRepository->findByDate($date);
-        
-        $message = (null === $temperature)? 'fail' : 'success';
+
+        $message = (null === $temperature) ? 'fail' : 'success';
 
         return $this->json([
                     'message' => $message,
-                    'result' => $temperature
-        ]);
-    }
-    
-    public function jsonLastTemperature(): JsonResponse
-    {
-        $temperature = $this->temperatureRepository->lastTemperature();
-        
-        $message = (null == $temperature) ? 'fail' : 'success';
-        
-        return $this->json([
-            'message' => $message,
-            'result' => $temperature
+                    'result' => $temperature,
         ]);
     }
 
+    public function jsonLastTemperature(): JsonResponse
+    {
+        $temperature = $this->temperatureRepository->lastTemperature();
+
+        $message = (null == $temperature) ? 'fail' : 'success';
+
+        return $this->json([
+            'message' => $message,
+            'result' => $temperature,
+        ]);
+    }
 }

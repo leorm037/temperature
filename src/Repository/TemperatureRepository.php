@@ -1,10 +1,17 @@
 <?php
 
+/*
+ * This file is part of Temperature.
+ *
+ * (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Temperature;
-use DateInterval;
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,7 +25,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TemperatureRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Temperature::class);
@@ -43,13 +49,12 @@ class TemperatureRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
      * @return Temperature[]
      */
     public function findByDays(int $days)
     {
-        $date = new DateTime();
-        $date->sub(DateInterval::createFromDateString("{$days} day"));
+        $date = new \DateTime();
+        $date->sub(\DateInterval::createFromDateString("{$days} day"));
         $dateFormat = $date->format('Y-m-d H:i:s');
 
         return $this->createQueryBuilder('t')
@@ -63,7 +68,7 @@ class TemperatureRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByDate(DateTime $date): ?Temperature
+    public function findByDate(\DateTime $date): ?Temperature
     {
         $dateFormat = $date->format('Y-m-d H:i:s');
 
@@ -89,27 +94,27 @@ class TemperatureRepository extends ServiceEntityRepository
         ;
     }
 
-//    /**
-//     * @return Temperature[] Returns an array of Temperature objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-//    public function findOneBySomeField($value): ?Temperature
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Temperature[] Returns an array of Temperature objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('t')
+    //            ->andWhere('t.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('t.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+    //    public function findOneBySomeField($value): ?Temperature
+    //    {
+    //        return $this->createQueryBuilder('t')
+    //            ->andWhere('t.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

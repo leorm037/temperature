@@ -1,18 +1,25 @@
 <?php
 
+/*
+ * This file is part of Temperature.
+ *
+ * (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace App\Factory;
 
 use App\Entity\Temperature;
-use DateTime;
 
 class TemperatureFactory
 {
-
     public static function build($json): Temperature
     {
         $temperature = new Temperature();
 
-        $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $json['date'], new \DateTimeZone("America/Sao_Paulo"));
+        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $json['date'], new \DateTimeZone('America/Sao_Paulo'));
 
         return $temperature
                         ->setDateTime($dateTime)
@@ -28,5 +35,4 @@ class TemperatureFactory
                         ->setIcon($json['icon'])
         ;
     }
-
 }

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Temperature.
+ *
+ * (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace App\Command;
 
 use App\Entity\Configuration;
@@ -13,15 +22,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Twig\Extra\TwigExtraBundle\DependencyInjection\Configuration as Configuration2;
 
 #[AsCommand(
-            name: 'temperature:register',
-            description: 'Records CPU temperature, GPU and Weather Weather.',
-    )]
+    name: 'temperature:register',
+    description: 'Records CPU temperature, GPU and Weather Weather.',
+)]
 class TemperatureRegisterCommand extends Command
 {
-    const URL_WEATHER = "http://apiadvisor.climatempo.com.br/api/v1/weather/locale/";
+    public const URL_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/';
     private const TEMP_CPU_COMMAND = 'cat /sys/class/thermal/thermal_zone0/temp';
     private const TEMP_GPU_COMMAND = '/usr/bin/vcgencmd measure_temp';
 
@@ -31,10 +39,10 @@ class TemperatureRegisterCommand extends Command
     private ConfigurationRepository $configurationRepository;
 
     public function __construct(
-            KernelInterface $kernel,
-            CityRepository $cityRepository,
-            TemperatureRepository $temperatureRepository,
-            ConfigurationRepository $configurationRepository
+        KernelInterface $kernel,
+        CityRepository $cityRepository,
+        TemperatureRepository $temperatureRepository,
+        ConfigurationRepository $configurationRepository
     ) {
         parent::__construct();
 
@@ -46,7 +54,6 @@ class TemperatureRegisterCommand extends Command
 
     protected function configure(): void
     {
-        
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -61,16 +68,16 @@ class TemperatureRegisterCommand extends Command
 
         $this->temperatureRepository->save($temperature, true);
 
-        $io->title("Temperature");
-        $io->text("CPU:         " . $temperature->getCpu());
-        $io->text("GPU:         " . $temperature->getGpu());
-        $io->text("Temperatura: " . $temperature->getTemperature());
-        $io->text("Sensação:    " . $temperature->getSensation());
-        $io->text("Humidade:    " . $temperature->getHumidity());
-        $io->text("Pressão:     " . $temperature->getPressure());
-        $io->text("Velocidade:  " . $temperature->getWindVelocity());
-        $io->text("Direção:     " . $temperature->getWindDirection());
-        $io->text("Data:        " . $temperature->getDateTime()->format('d/m/Y H:i:s'));
+        $io->title('Temperature');
+        $io->text('CPU:         '.$temperature->getCpu());
+        $io->text('GPU:         '.$temperature->getGpu());
+        $io->text('Temperatura: '.$temperature->getTemperature());
+        $io->text('Sensação:    '.$temperature->getSensation());
+        $io->text('Humidade:    '.$temperature->getHumidity());
+        $io->text('Pressão:     '.$temperature->getPressure());
+        $io->text('Velocidade:  '.$temperature->getWindVelocity());
+        $io->text('Direção:     '.$temperature->getWindDirection());
+        $io->text('Data:        '.$temperature->getDateTime()->format('d/m/Y H:i:s'));
         $io->newLine();
 
         return Command::SUCCESS;
@@ -80,13 +87,11 @@ class TemperatureRegisterCommand extends Command
     {
         /** @var Configuration $token */
         $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
-        
+
         $city = $this->cityRepository->listCitySelected()[0];
-        
-        $url = self::URL_WEATHER . $city->getId() . "/current?token=" . $token->getParamValue() . "&salt=" . rand();
-        
-        dd($url);
-        
+
+        $url = self::URL_WEATHER.$city->getId().'/current?token='.$token->getParamValue().'&salt='.rand();
+
         $tempClimaTempoJson = file_get_contents($url);
         $data = json_decode($tempClimaTempoJson, true);
         $climaTempo = $data['data'];
@@ -96,10 +101,10 @@ class TemperatureRegisterCommand extends Command
 
     private function cpu()
     {
-        if ("dev" === $this->kernel->getEnvironment()) {
+        if ('dev' === $this->kernel->getEnvironment()) {
             return floatval(random_int(31, 35));
         }
-        
+
         $tempCpu = shell_exec(self::TEMP_CPU_COMMAND);
 
         return $tempCpu / 1000;
@@ -107,13 +112,12 @@ class TemperatureRegisterCommand extends Command
 
     private function gpu()
     {
-        if ("dev" === $this->kernel->getEnvironment()) {
+        if ('dev' === $this->kernel->getEnvironment()) {
             return floatval(random_int(30, 34));
         }
-        
+
         $tempGpu = shell_exec(self::TEMP_GPU_COMMAND);
 
         return str_replace(['temp=', "'C"], '', $tempGpu);
     }
-
 }

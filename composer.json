@@ -96,7 +96,10 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "code-analyse": "phpstan analyse -c phpstan.neon -l 6 --ansi src"
+        "code-analyse": "phpstan analyse -c phpstan.neon -l 6 --ansi src",
+        "code-fix": [
+            "php-cs-fixer fix --ansi"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -109,6 +112,7 @@
         }
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.22",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.2.*",
         "symfony/css-selector": "6.2.*",

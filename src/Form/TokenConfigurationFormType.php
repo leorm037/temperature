@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Temperature.
+ *
+ * (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace App\Form;
 
 use App\Entity\Configuration;
@@ -10,7 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TokenConfigurationFormType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -22,8 +30,7 @@ class TokenConfigurationFormType extends AbstractType
                     'attr' => [
                         'autofocus' => true,
                         'autocomplete' => 'off',
-                    ]
-                    
+                    ],
                 ])
         ;
     }

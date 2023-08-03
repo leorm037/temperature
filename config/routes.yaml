@@ -8,10 +8,6 @@ app_configuration_controller:
     resource: "routes/configuration.yaml"
     prefix: /configuration
 
-app_country_controller:
-    resource: "routes/country.yaml"
-    prefix: /country
-
 app_city_controller:
     resource: "routes/city.yaml"
     prefix: /city

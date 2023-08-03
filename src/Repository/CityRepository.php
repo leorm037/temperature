@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Temperature.
+ *
+ * (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace App\Repository;
 
 use App\Entity\City;
@@ -16,7 +25,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CityRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, City::class);
@@ -53,7 +61,6 @@ class CityRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
      * @return array<int,string>
      */
     public function listCountry()
@@ -69,8 +76,6 @@ class CityRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
-     * @param string $country
      * @return array<int,string>
      */
     public function listStateFromCountry(string $country)
@@ -88,11 +93,9 @@ class CityRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
-     * @param string $state
      * @return City[]
      */
-    public function listCityFromCountryAndState(string $country, string $state, ?string $name = null)
+    public function listCityFromCountryAndState(string $country, string $state, string $name = null)
     {
         $query = $this->createQueryBuilder('c')
                 ->where('c.state = :state')
@@ -101,7 +104,7 @@ class CityRepository extends ServiceEntityRepository
 
         if (null != $name) {
             $query->andWhere('c.name like :name')
-                    ->setParameter('name', '%' . $name . '%')
+                    ->setParameter('name', '%'.$name.'%')
             ;
         }
 
@@ -126,8 +129,8 @@ class CityRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
      * @param string $state
+     *
      * @return City[]
      */
     public function findByCountryStateIdCity(?string $country, ?string $state, ?string $idCity)
@@ -144,27 +147,27 @@ class CityRepository extends ServiceEntityRepository
         ;
     }
 
-//    /**
-//     * @return City[] Returns an array of City objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-//    public function findOneBySomeField($value): ?City
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    /**
+    //     * @return City[] Returns an array of City objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('c.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+    //    public function findOneBySomeField($value): ?City
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

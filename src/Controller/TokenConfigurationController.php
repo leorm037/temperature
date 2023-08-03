@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Temperature.
+ *
+ * (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace App\Controller;
 
 use App\Entity\Configuration;
@@ -12,13 +21,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TokenConfigurationController extends AbstractController
 {
-
     private ConfigurationRepository $configurationRepository;
     private TranslatorInterface $translator;
 
     public function __construct(
-            ConfigurationRepository $configurationRepository,
-            TranslatorInterface $translator
+        ConfigurationRepository $configurationRepository,
+        TranslatorInterface $translator
     ) {
         $this->configurationRepository = $configurationRepository;
         $this->translator = $translator;
