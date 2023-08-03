@@ -58,6 +58,7 @@ function graphicConstruct(tempArray) {
             onClick: function (event, element) {
                 const TAG_SPINNER = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Carregando...</span></div>';
 
+                modalCity = $('#modalCity').html(TAG_SPINNER);                         //00
                 modalDateTime = $('#modalDateTime').html(TAG_SPINNER);                 //01
                 modalCpu = $('#modalCpu').html(TAG_SPINNER);                           //02
                 modalGpu = $('#modalGpu').html(TAG_SPINNER);                           //03
@@ -79,6 +80,7 @@ function graphicConstruct(tempArray) {
                         let dJson = data.result.dateTime.replace("+00:00", "");
                         let d = new Date(dJson);
 
+                        modalCity.text(data.result.city.name + "/" + data.result.city.state + " - " + data.result.city.country); //00
                         modalDateTime.text(d.toLocaleDateString() + " " + d.toLocaleTimeString());                     //01
                         modalCpu.text(parseFloat(data.result.cpu).toLocaleString(LOCALE) + " ºC");                     //02
                         modalGpu.text(parseFloat(data.result.gpu).toLocaleString(LOCALE) + " ºC");                     //03

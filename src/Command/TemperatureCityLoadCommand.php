@@ -66,7 +66,7 @@ class TemperatureCityLoadCommand extends Command
             return Command::FAILURE;
         }
         
-        $citiesJson = $this->climaTempoHelper->findCities($country, $token);
+        $citiesJson = $this->climaTempoHelper->findCities($country, $token->getParamValue());
         
         if ($this->climaTempoHelper->getError()) {
             $io->error($this->climaTempoHelper->getError());

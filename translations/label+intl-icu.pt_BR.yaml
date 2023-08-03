@@ -1,18 +1,25 @@
 'Select city': 'Selecione a cidade'
 'Select country abbreviation': 'Selecione a abreviação do país'
 'Select state abbreviation': 'Selecione a abreviação do estado'
+'Total records found': 'Total de registros encontrados: {total}'
 'weather condition': 'Condição do clima'
 'wind direction': 'Direção do vento'
 'wind velocity': 'Velocidade do vento'
+Actions: Ações
 City: Cidade
 Country: País
 Date: Data
+No: Não
+Select: Selecionar
+Selected: Selecionado
 State: Estado
+Yes: Sim
 btn.reset: Limpar
 btn.save: Salvar
 btn.search: Pesquisar
 day: dia
 days: dias
+help.token.no.show: 'O token gravado não é exibido por questão de segurança.'
 home: 'Página inicial'
 humidity: Humidade
 label.close: Fechar
@@ -21,7 +28,3 @@ pressure: Pressão
 sensation: Sensação
 temperature: Temperatura
 version: Versão
-'Total records found': 'Total de registros encontrados: {total}'
-Select: Selecionar
-Actions: Ações
-help.token.no.show: 'O token gravado não é exibido por questão de segurança.'

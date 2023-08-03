@@ -11,28 +11,43 @@
 
 namespace App\Factory;
 
+use App\Entity\City;
 use App\Entity\Temperature;
+use App\Repository\CityRepository;
+use DateTime;
+use DateTimeZone;
 
 class TemperatureFactory
 {
-    public static function build($json): Temperature
+    
+    private CityRepository $cityRepository;
+    
+    public function __construct(CityRepository $cityRepository)
+    {
+        $this->cityRepository = $cityRepository;
+    }
+    
+    public function build($climaTempo): Temperature
     {
         $temperature = new Temperature();
 
-        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $json['date'], new \DateTimeZone('America/Sao_Paulo'));
+        $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $climaTempo['data']['date'], new DateTimeZone('America/Sao_Paulo'));
+        
+        $city = $this->cityRepository->find($climaTempo['id']);
 
         return $temperature
                         ->setDateTime($dateTime)
                         ->setCpu(0.0)
                         ->setGpu(0.0)
-                        ->setTemperature($json['temperature'])
-                        ->setSensation($json['sensation'])
-                        ->setWindDirection($json['wind_direction'])
-                        ->setWindVelocity($json['wind_velocity'])
-                        ->setHumidity($json['humidity'])
-                        ->setWeatherCondition($json['condition'])
-                        ->setPressure($json['pressure'])
-                        ->setIcon($json['icon'])
+                        ->setCity($city)
+                        ->setTemperature($climaTempo['data']['temperature'])
+                        ->setSensation($climaTempo['data']['sensation'])
+                        ->setWindDirection($climaTempo['data']['wind_direction'])
+                        ->setWindVelocity($climaTempo['data']['wind_velocity'])
+                        ->setHumidity($climaTempo['data']['humidity'])
+                        ->setWeatherCondition($climaTempo['data']['condition'])
+                        ->setPressure($climaTempo['data']['pressure'])
+                        ->setIcon($climaTempo['data']['icon'])
         ;
     }
 }

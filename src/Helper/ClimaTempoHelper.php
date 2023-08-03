@@ -13,13 +13,14 @@ namespace App\Helper;
 
 use App\Entity\City;
 use Psr\Log\LoggerInterface;
+use stdClass;
 
 class ClimaTempoHelper
 {
 
     private const URL_CITY_ADD = 'http://apiadvisor.climatempo.com.br/api-manager/user-token/:your-app-token/locales';
-    private const URL_CITY_FIND = 'http://apiadvisor.climatempo.com.br/api/v1/locale/city?country=:country&token=:you-app-token';
-    private const URL_CITY_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/:city/current?token=:you-app-token&salt=:salt';
+    private const URL_CITY_FIND = 'http://apiadvisor.climatempo.com.br/api/v1/locale/city?country=:country&token=:your-app-token';
+    private const URL_CITY_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/:city/current?token=:your-app-token&salt=:salt';
 
     private $error = null;
     private LoggerInterface $logger;
@@ -91,13 +92,24 @@ class ClimaTempoHelper
         if ($this->error) {
             $this->logger->error($this->error, $request);
         }
+        
+        if(isset($request['error']) && $request['error']) {
+            $this->error = $request['detail'];
+            return null;
+        }
 
         return $request;
     }
 
+    /**
+     * 
+     * @param int $cityId
+     * @param string $token
+     * @return array<string,string>
+     */
     public function weather(int $cityId, string $token)
     {
-        $url = str_replace([':city', ':your-app-token', ':CITY'], [$city, $token, rand()], self::URL_CITY_WEATHER);
+        $url = str_replace([':city', ':your-app-token', ':salt'], [$cityId, $token, rand()], self::URL_CITY_WEATHER);
 
         $handle = curl_init($url);
 
@@ -115,8 +127,13 @@ class ClimaTempoHelper
         if ($this->error) {
             $this->logger->error($this->error, $request);
         }
+        
+        if(isset($request['error']) && $request['error']) {
+            $this->error = $request['detail'];
+            return null;
+        }
 
-        return $request;
+        return json_decode($request, true);
     }
 
     public function getError(): ?string
