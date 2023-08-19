@@ -123,7 +123,7 @@ class CityController extends AbstractController
                     'country' => $city->getCountry(),
         ]));
 
-        //$climaTempo = json_decode($this->climaTempoHelper->addCity($city, $token->getParamValue()));
+        $climaTempo = json_decode($this->climaTempoHelper->addCity($city, $token->getParamValue()));
 
         if ($this->climaTempoHelper->getError()) {
             $this->addFlash('danger', $this->climaTempoHelper->getError());
