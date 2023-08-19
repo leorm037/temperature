@@ -1,0 +1,15 @@
+{# templates/email/city/selectedCityMessage.html.twig #}
+<!doctype html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <title>Selected city</title>
+    </head>
+    <body>
+        <h1>City Selected</h1>
+        <p>Id: {{ city.id }}</p>
+        <p>Name: {{ city.name }}</p>
+        <p>State: {{ city.state }}</p>
+        <p>Country: {{ city.country }}</p>
+        <p>Selected: {{ (city.selected) ? 'Yes'|trans({}, 'label') : 'No'|trans({}, 'label') }}</p>
+    </body>
+</html>

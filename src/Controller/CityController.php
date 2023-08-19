@@ -11,15 +11,16 @@
 
 namespace App\Controller;
 
-use App\Entity\City;
 use App\Entity\Configuration;
 use App\Helper\ClimaTempoHelper;
+use App\Message\SelectedCityMessage;
 use App\Repository\CityRepository;
 use App\Repository\ConfigurationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CityController extends AbstractController
@@ -29,18 +30,21 @@ class CityController extends AbstractController
     private TranslatorInterface $translator;
     private ClimaTempoHelper $climaTempoHelper;
     private ConfigurationRepository $configurationRepository;
+    private MessageBusInterface $messageBus;
 
     public function __construct(
             CityRepository $cityRepository,
             TranslatorInterface $translator,
             ClimaTempoHelper $climaTempoHelper,
-            ConfigurationRepository $configurationRepository
+            ConfigurationRepository $configurationRepository,
+            MessageBusInterface $messageBus
     )
     {
         $this->cityRepository = $cityRepository;
         $this->translator = $translator;
         $this->climaTempoHelper = $climaTempoHelper;
         $this->configurationRepository = $configurationRepository;
+        $this->messageBus = $messageBus;
     }
 
     public function index(Request $request): Response
@@ -122,8 +126,10 @@ class CityController extends AbstractController
                     'state' => $city->getState(),
                     'country' => $city->getCountry(),
         ]));
+               
+        $this->messageBus->dispatch(new SelectedCityMessage($city));
 
-        $climaTempo = json_decode($this->climaTempoHelper->addCity($city, $token->getParamValue()));
+        //$climaTempo = json_decode($this->climaTempoHelper->addCity($city, $token->getParamValue()));
 
         if ($this->climaTempoHelper->getError()) {
             $this->addFlash('danger', $this->climaTempoHelper->getError());

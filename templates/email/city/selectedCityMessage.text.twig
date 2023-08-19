@@ -1,0 +1,8 @@
+{# templates/email/city/selectedCityMessage.text.twig #}
+# Selected city
+
+Id: {{ city.id }}
+Name: {{ city.name }}
+State: {{ city.state }}
+Country: {{ city.country }}
+Selected: {{ (city.selected) ? 'Yes'|trans({}, 'label') : 'No'|trans({}, 'label') }}

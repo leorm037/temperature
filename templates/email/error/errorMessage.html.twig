@@ -1,0 +1,13 @@
+{# templates/email/error/errorMessage.html.twig #}
+<!doctype html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <title>Error message</title>
+    </head>
+    <body>
+        <h1>Message error</h1>
+        <p>{{ code }} - {{ message }}</p>
+        <h1>File</h1>
+        <p>{{ file }} - {{ line }}</p>
+    </body>
+</html>
