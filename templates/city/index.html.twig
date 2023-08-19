@@ -7,29 +7,29 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card">
-        <div class="card-header">
-            <h1 class="h4 my-0"><i class="bi bi-geo"></i> {{ 'City'|trans({}, 'label') }}</h1>
-        </div>
-        <form method="post" name="citySearchForm" action="{{ path('app_city_index') }}">
+    <form method="post" id="search" name="citySearchForm" action="{{ path('app_city_index') }}">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="h4 my-0"><i class="bi bi-geo"></i> {{ 'City'|trans({}, 'label') }}</h1>
+            </div>        
             <div class="card-body">
                 <div class="mb-3">
                     <label for="country" class="form-label">{{ 'Country'|trans({}, 'label') }}</label>
-                    <select name="country" id="country" class="form-select" required="true">
+                    <select name="country" id="country" class="form-select" required="true" form="search">
                         <option value>{{ 'Select country abbreviation'|trans({}, 'label') }}</option>
-                        {% for country in countries %}
-                            <option value="{{ country }}"{% if country == cityForm.country %} selected{% endif %}>{{ country }}</option>
+                        {% for c in countries %}
+                            <option value="{{ c }}"{% if c == country %} selected{% endif %}>{{ c }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="state" class="form-label">{{ 'State'|trans({}, 'label') }}</label>
-                    <select name="state" id="state" class="form-select" required="true">
+                    <select name="state" id="state" class="form-select" required="true" form="search">
                         {% if states %}
                             <option value>{{ 'Select state abbreviation'|trans({}, 'label') }}</option>
                         {% endif %}
-                        {% for state in states %}
-                            <option value="{{ state }}"{% if state == cityForm.state %} selected{% endif %}>{{ state }}</option>
+                        {% for s in states %}
+                            <option value="{{ s }}"{% if s == state %} selected{% endif %}>{{ s }}</option>
                         {% else %}
                             <option value>{{ 'Select country abbreviation'|trans({}, 'label') }}</option>
                         {% endfor %}
@@ -37,61 +37,98 @@
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">{{ 'City'|trans({}, 'label') }}</label>
-                    <input type="text" name="name" id="name" class="form-control" value="{{ cityForm.name }}">
+                    <input type="text" name="name" id="name" class="form-control" value="{{ cityName }}" form="search">
                 </div>
             </div>
             <div class="card-footer bg-primary-subtle bg-gradient text-end border-bottom border-primary-subtle">
-                <button type="submit" class="btn btn-primary bg-gradient btn-sm">{{ 'btn.search'|trans({}, 'label') }}</button>
+                <button type="submit" class="btn btn-primary bg-gradient btn-sm" form="search">{{ 'btn.search'|trans({}, 'label') }}</button>
             </div>
-        </form>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>{{ 'Name'|trans({}, 'label') }}</th>
-                            <th>{{ 'State'|trans({}, 'label') }}</th>
-                            <th>{{ 'Country'|trans({}, 'label') }}</th>
-                            <th>{{ 'Selected'|trans({}, 'label') }}</th>
-                            <th class="text-center">{{ 'Actions'|trans({}, 'label') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for city in cities %}
-                            <tr{% if city.selected %} class="table-primary"{% endif %}>
-                                <th>{{ city.id }}</th>
-                                <td>{{ city.name }}</td>
-                                <td>{{ city.state }}</td>
-                                <td>{{ city.country }}</td>
-                                <td>{{ (city.selected) ? 'Yes'|trans({}, 'label') : 'No'|trans({}, 'label') }}</td>
-                                <td class="text-center">
-                                    {% if not city.selected %}
-                                        <form method="POST" action="{{ path('app_city_select') }}">
-                                            <input type="hidden" name="_csrf" value="{{ csrf_token('select' ~ city.id) }}">
-                                            <input type="hidden" name="city" value="{{ city.id }}">
-                                            <button class="btn btn-sm btn-primary" type="submit">{{ 'Select'|trans({}, 'label') }}</button>
-                                        </form>
-                                    {% else %}
-                                        <button type="button" disabled class="btn btn-sm btn-secondary">{{ 'Select'|trans({}, 'label') }}</button>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% else %}
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <td colspan="6" class="text-center">{{ 'No record found'|trans }}</td>
+                                <th>#</th>
+                                <th>{{ 'Name'|trans({}, 'label') }}</th>
+                                <th>{{ 'State'|trans({}, 'label') }}</th>
+                                <th>{{ 'Country'|trans({}, 'label') }}</th>
+                                <th>{{ 'Selected'|trans({}, 'label') }}</th>
+                                <th class="text-center">{{ 'Actions'|trans({}, 'label') }}</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="6" class="text-center">{{ 'Total records found'|trans({total: cities|length}, 'label') }}</td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for ct in cities %}
+                                <tr{% if ct.selected %} class="table-primary"{% endif %}>
+                                    <th>{{ ct.id }}</th>
+                                    <td>{{ ct.name }}</td>
+                                    <td>{{ ct.state }}</td>
+                                    <td>{{ ct.country }}</td>
+                                    <td>{{ (ct.selected) ? 'Yes'|trans({}, 'label') : 'No'|trans({}, 'label') }}</td>
+                                    <td class="text-center">
+                                        {% if not ct.selected %}                                                                                      
+                                                <a class="btn btn-sm btn-primary" href="{{ path('app_city_select', {cityId: ct.id}) }}">{{ 'Select'|trans({}, 'label') }}</a>
+                                        {% else %}
+                                            <button type="button" disabled class="btn btn-sm btn-secondary">{{ 'Select'|trans({}, 'label') }}</button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center">{{ 'No record found'|trans }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row justify-content-end">
+                    <div class="col-8 offset-2 align-self-center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center m-0">
+                                {% if pages %}
+                                    <li class="page-item{% if page == 1 %} disabled{% endif %}"><button {% if page > 1 %}name="page" value="{{ page - 1 }}"{% endif %} class="page-link" form="search">{{ 'Previous'|trans({}, 'label') }}</button></li>
+                                    
+                                    {% set salt = (page/10)|round(0,'floor') * 10 %}
+                                    
+                                    {% if page is divisible by(10) %}
+                                        {% set salt = salt - 10 %}
+                                    {% endif %}
+                                    
+                                    {% set current = 0 %}
+                                    
+                                    {% if page > 10 %}
+                                        <li class="page-item"><button type="submit" name="page" value="{{ salt -1 }}" class="page-link" form="search">...</button></li>
+                                    {% endif %}
+                                    
+                                    {% for i in 1..10 %}
+                                        {% set current = i + salt %}
+                                        {% if current <= pages %}
+                                            <li class="page-item"><button type="submit" name="page" value="{{ current }}" class="page-link {% if current == page %}active{% endif %}">{{ current }}</button></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if current < count and current <= pages %}
+                                        <li class="page-item"><button type="submit" name="page" value="{{ current + 1 }}" class="page-link" form="search">...</button></li>
+                                    {% endif %}
+                                    
+                                    <li class="page-item{% if page == pages %} disabled{% endif %}"><button {% if page < pages %}name="page" value="{{ page + 1 }}"{% endif %} class="page-link" form="search">{{ 'Next'|trans({}, 'label') }}</button></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-2 align-self-end">
+                        <select class="form-select" name="registers" id="registers" form="search">
+                            <option value="10"{% if 10 == registers %} selected="true"{% endif %}>10</option>
+                            <option value="25"{% if 25 == registers %} selected="true"{% endif %}>25</option>
+                            <option value="50"{% if 50 == registers %} selected="true"{% endif %}>50</option>
+                            <option value="100"{% if 100 == registers %} selected="true"{% endif %}>100</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 {% endblock %}
 {% block javascripts_footer %}
 
@@ -114,6 +151,10 @@
                         })
                         ;
             }
+        });
+        
+        $('#registers').on('change', function(){
+            $('#search').trigger('submit')
         });
     </script>
 {% endblock %}

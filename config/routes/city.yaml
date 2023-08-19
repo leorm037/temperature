@@ -2,6 +2,9 @@ app_city_index:
     path: /
     controller: App\Controller\CityController::index
     methods: GET|POST
+    defaults:
+        country: null
+        state: null
 
 app_city_states:
     path: /states
@@ -9,7 +12,9 @@ app_city_states:
     methods: POST
 
 app_city_select:
-    path: /select
+    path: /select/{cityId}
     controller: App\Controller\CityController::selectCity
-    methods: POST
+    methods: GET
+    requirements:
+        cityId: '\d+'
 
