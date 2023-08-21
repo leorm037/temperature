@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-danger">{{ 'http_error.name'|trans({ 'status_code': 500 }) }}</h1>
+
+    <p class="lead">
+        {{ 'http_error_500.description'|trans }} aqui no 500
+    </p>
+    <p>
+        {{ 'http_error_500.suggestion'|trans({ 'url': path('app_index') })|raw }}
+    </p>
+{% endblock %}

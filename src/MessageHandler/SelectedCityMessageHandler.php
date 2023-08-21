@@ -14,10 +14,11 @@ namespace App\MessageHandler;
 use App\Message\SelectedCityMessage;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Address;
 
-final class SelectedCityMessageHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+final class SelectedCityMessageHandler
 {
 
     private MailerInterface $mailer;

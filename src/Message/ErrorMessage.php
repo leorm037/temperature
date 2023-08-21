@@ -19,7 +19,14 @@ final class ErrorMessage
     private $file;
     private $line;
 
-    public function __construct($code, $message, $file, $line)
+    /**
+     * 
+     * @param int $code
+     * @param string $message
+     * @param string|null $file
+     * @param int $line
+     */
+    public function __construct(int $code = 0, string $message, string|null $file = null, int $line = 0)
     {
         $this->code = $code;
         $this->message = $message;

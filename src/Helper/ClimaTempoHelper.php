@@ -36,14 +36,14 @@ class ClimaTempoHelper
      * @param string $token
      * @return array<string,string>
      */
-    public function addCity(City $city, string $token)
+    public function addCity(int $cityId, string $token)
     {
         $url = str_replace(':your-app-token', $token, self::URL_CITY_ADD);
 
         $handle = curl_init($url);
 
         $values = [
-            'localeId[]' => $city->getId(),
+            'localeId[]' => $cityId,
         ];
 
         curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'PUT');

@@ -2,6 +2,8 @@ framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
         envelope:
-            sender: 'sistema@paginaemconstrucao.com.br'
+            sender: '%env(APP_MAILER_FROM)%'
+            recipients: ['%env(APP_MAILER_TO)%']
         headers:
-            From: 'Sistema <sistema@paginaemconstrucao.com.br>'
+            From: '%env(APP_MAILER_FROM)%'
+            To: '%env(APP_MAILER_TO)%'

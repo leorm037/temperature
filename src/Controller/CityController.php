@@ -13,6 +13,7 @@ namespace App\Controller;
 
 use App\Entity\Configuration;
 use App\Helper\ClimaTempoHelper;
+use App\Message\ErrorMessage;
 use App\Message\SelectedCityMessage;
 use App\Repository\CityRepository;
 use App\Repository\ConfigurationRepository;
@@ -78,11 +79,11 @@ class CityController extends AbstractController
 
             if ($cities->count() > 0) {
                 $pages = floor($cities->count() / $registers);
-                
+
                 if ($cities->count() % $registers > 0) {
                     $pages = $pages + 1;
                 }
-                
+
                 $count = $cities->count();
             }
         }
@@ -119,28 +120,32 @@ class CityController extends AbstractController
         /** @var Configuration $token */
         $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
 
-        $city = $this->cityRepository->select($id);
-
-        $this->addFlash('success', $this->translator->trans('message.city.select.success', [
-                    'city' => $city->getName(),
-                    'state' => $city->getState(),
-                    'country' => $city->getCountry(),
-        ]));
-               
-        $this->messageBus->dispatch(new SelectedCityMessage($city));
-
-        //$climaTempo = json_decode($this->climaTempoHelper->addCity($city, $token->getParamValue()));
+        $climaTempo = json_decode($this->climaTempoHelper->addCity($id, $token->getParamValue()));
 
         if ($this->climaTempoHelper->getError()) {
             $this->addFlash('danger', $this->climaTempoHelper->getError());
+            
+            $this->messageBus->dispatch(new ErrorMessage(0,$this->climaTempoHelper->getError()));
         }
 
         if (isset($climaTempo->error)) {
             $this->addFlash('danger', $climaTempo->detail);
+            
+            $this->messageBus->dispatch(new ErrorMessage(0,$climaTempo->detail));
         }
 
         if (isset($climaTempo->status)) {
+            $city = $this->cityRepository->select($id);
+            
             $this->addFlash('success', 'Locales: ' . implode(',', $climaTempo->locales));
+
+            $this->addFlash('success', $this->translator->trans('message.city.select.success', [
+                        'city' => $city->getName(),
+                        'state' => $city->getState(),
+                        'country' => $city->getCountry(),
+            ]));
+
+            $this->messageBus->dispatch(new SelectedCityMessage($city));
         }
 
         return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
