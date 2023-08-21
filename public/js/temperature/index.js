@@ -88,7 +88,15 @@ function graphicConstruct(tempArray) {
                         modalTemperature.text(parseFloat(data.result.temperature).toLocaleString(LOCALE) + " ºC");     //05
                         modalWindDirection.text(data.result.windDirection);                                            //06
                         modalWindVelocity.text(parseFloat(data.result.windVelocity).toLocaleString(LOCALE) + " km/h"); //07
+                                                
                         modalHumidity.text(parseFloat(data.result.humidity).toLocaleString(LOCALE) + "%");             //08
+                        
+                        if (parseFloat(data.result.humidity) >= 30.0) {
+                            modalHumidity.parent('tr').removeClass('table-danger');
+                        } else {
+                            modalHumidity.parent('tr').addClass('table-danger');
+                        }
+                        
                         modalWeatherCondition.html(data.result.weatherCondition + " <img src='" + BASE_URL + "/realistic/70px/" + data.result.icon + ".png'>");                                      //09
                         modalPressure.text(parseFloat(data.result.pressure).toLocaleString(LOCALE) + " hPa");          //10
                     } else {

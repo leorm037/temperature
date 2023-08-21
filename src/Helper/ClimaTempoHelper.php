@@ -119,6 +119,8 @@ class ClimaTempoHelper
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
         $request = curl_exec($handle);
+        
+        $result = json_decode($request, true);
 
         curl_close($handle);
 
@@ -128,12 +130,12 @@ class ClimaTempoHelper
             $this->logger->error($this->error, $request);
         }
         
-        if(isset($request['error']) && $request['error']) {
-            $this->error = $request['detail'];
+        if(isset($result['error']) && $result['error']) {
+            $this->error = $result['detail'];
             return null;
         }
 
-        return json_decode($request, true);
+        return $result;
     }
 
     public function getError(): ?string

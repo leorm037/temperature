@@ -18,12 +18,15 @@ use App\Helper\ClimaTempoHelper;
 use App\Repository\CityRepository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\TemperatureRepository;
+use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsCommand(
             name: 'temperature:register',
@@ -37,16 +40,20 @@ class TemperatureRegisterCommand extends Command
     private const TEMP_GPU_COMMAND = '/usr/bin/vcgencmd measure_temp';
 
     private KernelInterface $kernel;
+    private LoggerInterface $logger;
     private ClimaTempoHelper $climaTempoHelper;
     private CityRepository $cityRepository;
+    private MessageBusInterface $messageBus;
     private TemperatureFactory $temperatureFactory;
     private TemperatureRepository $temperatureRepository;
     private ConfigurationRepository $configurationRepository;
 
     public function __construct(
             KernelInterface $kernel,
+            LoggerInterface $logger,
             ClimaTempoHelper $climaTempoHelper,
             CityRepository $cityRepository,
+            MessageBusInterface $messageBus,
             TemperatureFactory $temperatureFactory,
             TemperatureRepository $temperatureRepository,
             ConfigurationRepository $configurationRepository
@@ -55,8 +62,10 @@ class TemperatureRegisterCommand extends Command
         parent::__construct();
 
         $this->kernel = $kernel;
+        $this->logger = $logger;
         $this->climaTempoHelper = $climaTempoHelper;
         $this->cityRepository = $cityRepository;
+        $this->messageBus = $messageBus;
         $this->temperatureFactory = $temperatureFactory;
         $this->temperatureRepository = $temperatureRepository;
         $this->configurationRepository = $configurationRepository;
@@ -71,31 +80,40 @@ class TemperatureRegisterCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $temperature = $this->temperatureFactory->build($this->climaTempo());
+        try {
 
-        $temperature
-                ->setCpu($this->cpu())
-                ->setGpu($this->gpu());
-       
-        $this->temperatureRepository->save($temperature, true);
+            $temperature = $this->temperatureFactory->build($this->climaTempo());
 
-        $io->title('Temperature');
-        $io->text('Cidade:      ' . $temperature->getCity()->getName() . '/' . $temperature->getCity()->getState() . ' - ' . $temperature->getCity()->getCountry());
-        $io->text('CPU:         ' . $temperature->getCpu());
-        $io->text('GPU:         ' . $temperature->getGpu());
-        $io->text('Temperatura: ' . $temperature->getTemperature());
-        $io->text('Sensação:    ' . $temperature->getSensation());
-        $io->text('Humidade:    ' . $temperature->getHumidity());
-        $io->text('Pressão:     ' . $temperature->getPressure());
-        $io->text('Velocidade:  ' . $temperature->getWindVelocity());
-        $io->text('Direção:     ' . $temperature->getWindDirection());
-        $io->text('Data:        ' . $temperature->getDateTime()->format('d/m/Y H:i:s'));
-        $io->newLine();
+            $temperature
+                    ->setCpu($this->cpu())
+                    ->setGpu($this->gpu());
 
-        return Command::SUCCESS;
+            $this->temperatureRepository->save($temperature, true);
+
+            $io->title('Temperature');
+            $io->text('Cidade:      ' . $temperature->getCity()->getName() . '/' . $temperature->getCity()->getState() . ' - ' . $temperature->getCity()->getCountry());
+            $io->text('CPU:         ' . $temperature->getCpu());
+            $io->text('GPU:         ' . $temperature->getGpu());
+            $io->text('Temperatura: ' . $temperature->getTemperature());
+            $io->text('Sensação:    ' . $temperature->getSensation());
+            $io->text('Humidade:    ' . $temperature->getHumidity());
+            $io->text('Pressão:     ' . $temperature->getPressure());
+            $io->text('Velocidade:  ' . $temperature->getWindVelocity());
+            $io->text('Direção:     ' . $temperature->getWindDirection());
+            $io->text('Data:        ' . $temperature->getDateTime()->format('d/m/Y H:i:s'));
+            $io->newLine();
+
+            return Command::SUCCESS;
+        } catch (Exception $e) {
+            $io->title('Error');
+            $io->error($e->getMessage());
+            $this->logger->error($this->climaTempoHelper->getError());
+            
+            return Command::FAILURE;
+        }
     }
 
-    private function climaTempo(): array
+    private function climaTempo(): ?array
     {
         /** @var Configuration $token */
         $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
@@ -103,11 +121,15 @@ class TemperatureRegisterCommand extends Command
         /** @var City $city */
         $city = $this->cityRepository->listCitySelected()[0];
 
+        $weather = $this->climaTempoHelper->weather($city->getId(), $token->getParamValue());
+
         if ($this->climaTempoHelper->getError()) {
+            throw new Exception($this->climaTempoHelper->getError(), 0);
+
             return null;
         }
-        
-        return $this->climaTempoHelper->weather($city->getId(), $token->getParamValue());
+
+        return $weather;
     }
 
     private function cpu()
