@@ -48,6 +48,27 @@ services:
               source: mariadb
               target: /var/lib/mysql
             - .:/app
+            
+    phpmyadmin:
+        container_name: temperature-phpmyadmin
+        image: phpmyadmin:latest
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=temperature
+            - MYSQL_USER=temperature
+            - MYSQL_PASSWORD=temperature
+            - PMA_HOST=db
+            - PMA_PORT=3306
+            - PMA_USER=temperature
+            - PMA_PASSWORD=temperature
+            - PMA_PMADB=temperature
+#            - PMA_ARBITRARY=0
+        ports:
+            - 8080:80
+        depends_on:
+            - mariadb
+        links:
+            - mariadb:db
 
     mail:
         container_name: temperature-mail

@@ -25,6 +25,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TemperatureRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Temperature::class);
@@ -62,6 +63,24 @@ class TemperatureRepository extends ServiceEntityRepository
                         ->where('t.dateTime >= :date')
                         ->setParameter('date', $dateFormat)
                         ->orderBy('t.dateTime', 'DESC')
+                        ->getQuery()
+                        ->enableResultCache(300)
+                        ->getResult()
+        ;
+    }
+
+    public function findByDaysGroup(int $days)
+    {
+        $date = new \DateTime();
+        $date->sub(\DateInterval::createFromDateString("{$days} day"));
+        $dateFormat = $date->format('Y-m-d H:i:s');
+
+        return $this->createQueryBuilder('t')
+                        ->select("DATE_FORMAT(t.dateTime, '%Y-%m-%d %H:00:00') AS dateTime, AVG(t.cpu) AS cpu, AVG(t.gpu) AS gpu, AVG(t.sensation) AS sensation, AVG(t.temperature) AS temperature")
+                        ->where('t.dateTime >= :date')
+                        ->setParameter('date', $dateFormat)
+                        ->addGroupBy("dateTime")
+                        ->orderBy('dateTime', 'DESC')
                         ->getQuery()
                         ->enableResultCache(300)
                         ->getResult()
