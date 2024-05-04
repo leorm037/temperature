@@ -31,5 +31,6 @@ jobs:
             composer install -q -a -n
             sudo cp -a /deploy/temperature/. /var/www/temperature/
             cd /var/www/temperature
+            sudo composer dump-env prod
             sudo php bin/console cache:clear -q -n
             sudo chown -R www-data: .
