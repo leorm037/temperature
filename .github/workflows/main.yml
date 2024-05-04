@@ -1,0 +1,35 @@
+name: "Deploy para TUX"
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Clone da branch main"
+        uses: actions/checkout@v4
+        
+      - name: "Copiar arquivos da branch main para TUX"
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.TUX_HOST }}
+          port: ${{ secrets.TUX_SSH_PORT }}
+          username: ${{ secrets.TUX_USERNAME }}
+          key: ${{ secrets.TUX_SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/deploy/temperature"
+      - name: "Deploy da aplicação"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TUX_HOST }}
+          username: ${{ secrets.TUX_USERNAME }}
+          key: ${{ secrets.TUX_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.TUX_SSH_PORT }}
+          script: |            
+            cd /deploy/temperature
+            composer install -q -a -n
+            sudo cp -a /deploy/temperature/. /var/www/temperature/
+            cd /var/www/temperature
+            sudo php bin/console cache:clear -q -n
+            sudo chown -R www-data: .
