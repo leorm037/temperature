@@ -146,14 +146,16 @@ class TemperatureRegisterCommand extends Command
         return $tempCpu / 1000;
     }
 
-    private function gpu()
+    private function gpu(): float
     {
         if ('dev' === $this->kernel->getEnvironment()) {
             return floatval(random_int(30, 34));
         }
 
         $tempGpu = shell_exec(self::TEMP_GPU_COMMAND);
+        
+        $temp = str_replace(['temp=', "'C"], '', $tempGpu);
 
-        return str_replace(['temp=', "'C"], '', $tempGpu);
+        return floatval($temp);
     }
 }
