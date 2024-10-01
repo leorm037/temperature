@@ -8,19 +8,17 @@
         <meta name="author" content="">
         <meta name="generator" content="">
         
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
-        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
         
         <title>{% block title %}Temperature{% endblock %}</title>
         
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
-        
         {% block stylesheets %}
             
-            <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
-            <link href="{{ asset('font/bootstrap-icons.css', 'bootstrap-icon') }}" rel="stylesheet">
+            <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('bootstrap-icon/font/bootstrap-icons.css') }}" rel="stylesheet">
         {% endblock %}
         {% block javascripts_header %}
             
@@ -66,13 +64,10 @@
         </footer>
         {% block javascripts_footer %}
             
-            <script src="{{ asset('jquery.min.js', 'jquery') }}"></script>
-            <script src="{{ asset('loadingoverlay.min.js', 'loading') }}"></script>
-            <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
+            <script src="{{ asset('jquery/jquery-3.7.1.min.js') }}"></script>
+            <script src="{{ asset('jquery-loading-overlay/loadingoverlay.min.js') }}"></script>
             <script src="{{ asset('js/app.js') }}"></script>
-            <script>
-                const LOADING_MESSAGE="{{ 'message.loading'|trans }}";
-            </script>
+            <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>            
         {% endblock %}
     </body>
 </html>
