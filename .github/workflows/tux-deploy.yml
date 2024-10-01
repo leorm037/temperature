@@ -1,16 +1,18 @@
-name: "Deploy para TUX"
+name: "Tux"
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: "Clone da branch main"
-        uses: actions/checkout@v4
-        
-      - name: "Copiar arquivos da branch main para TUX"
+      - name: "Obter código"
+        uses: actions/checkout@v4        
+      - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.TUX_HOST }}
@@ -19,7 +21,7 @@ jobs:
           key: ${{ secrets.TUX_SSH_PRIVATE_KEY }}
           source: "."
           target: "/deploy/temperature"
-      - name: "Deploy da aplicação"
+      - name: "Construção da aplicação"
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.TUX_HOST }}
@@ -28,9 +30,11 @@ jobs:
           port: ${{ secrets.TUX_SSH_PORT }}
           script: |            
             cd /deploy/temperature
-            composer install -q -a -n
-            sudo cp -a /deploy/temperature/. /var/www/temperature/
+            composer install --no-dev --no-progress -a -o
+            composer dump-env prod
+            sudo cp -RTf /deploy/temperature/ /var/www/temperature
             cd /var/www/temperature
-            sudo composer dump-env prod -q -n
-            sudo php bin/console cache:clear -q -n
+            APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear -q -n
+            sudo rm -R public/assets
+            APP_ENV=prod APP_DEBUG=0 sudo php bin/console asset-map:compile
             sudo chown -R www-data: .
