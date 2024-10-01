@@ -114,8 +114,8 @@ class ClimaTempoHelper
         $handle = curl_init($url);
 
         curl_setopt($handle, CURLOPT_HTTPGET, true);
-        curl_setopt($handle, CURLOPT_TIMEOUT_MS, 10000);
-        curl_setopt($handle, CURLOPT_CONNECTTIMEOUT_MS, 10000);
+        curl_setopt($handle, CURLOPT_TIMEOUT_MS, 60000);
+        curl_setopt($handle, CURLOPT_CONNECTTIMEOUT_MS, 60000);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
         $request = curl_exec($handle);
@@ -127,7 +127,8 @@ class ClimaTempoHelper
         $this->error = curl_error($handle);
 
         if ($this->error) {
-            $this->logger->error($this->error, $request);
+            $this->logger->error($this->error, ['request' => $request]);
+            return null;
         }
         
         if(isset($result['error']) && $result['error']) {

@@ -12,10 +12,13 @@ services:
             - 9000:9000
         links:
             - mariadb
+            - redis
+            - mail
         depends_on:
             - mariadb
             - nginx
             - mail
+            - redis
             
     nginx:
         container_name: temperature-nginx
@@ -77,6 +80,13 @@ services:
         ports:
             - 8025:8025
             - 1025:1025
+
+    redis:
+        container_name: temperature-redis
+        image: redis:latest
+        restart: always
+        ports:
+            - 6379:6379
 
 volumes:
     mariadb:

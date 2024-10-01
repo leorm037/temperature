@@ -27,6 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use function dd;
 
 #[AsCommand(
             name: 'temperature:register',
@@ -91,24 +92,32 @@ class TemperatureRegisterCommand extends Command
             $this->temperatureRepository->save($temperature, true);
 
             $io->title('Temperature');
-            $io->text('Cidade:      ' . $temperature->getCity()->getName() . '/' . $temperature->getCity()->getState() . ' - ' . $temperature->getCity()->getCountry());
+
+            if (null !== $temperature->getCity()) {
+                $io->text('Cidade:      ' . $temperature->getCity()->getName() . '/' . $temperature->getCity()->getState() . ' - ' . $temperature->getCity()->getCountry());
+            }
+
             $io->text('CPU:         ' . $temperature->getCpu());
             $io->text('GPU:         ' . $temperature->getGpu());
-            $io->text('Temperatura: ' . $temperature->getTemperature());
-            $io->text('Sensação:    ' . $temperature->getSensation());
-            $io->text('Humidade:    ' . $temperature->getHumidity());
-            $io->text('Pressão:     ' . $temperature->getPressure());
-            $io->text('Velocidade:  ' . $temperature->getWindVelocity());
-            $io->text('Direção:     ' . $temperature->getWindDirection());
-            $io->text('Data:        ' . $temperature->getDateTime()->format('d/m/Y H:i:s'));
+            
+            if (null !== $temperature->getTemperature()) {            
+                $io->text('Temperatura: ' . $temperature->getTemperature());
+                $io->text('Sensação:    ' . $temperature->getSensation());
+                $io->text('Humidade:    ' . $temperature->getHumidity());
+                $io->text('Pressão:     ' . $temperature->getPressure());
+                $io->text('Velocidade:  ' . $temperature->getWindVelocity());
+                $io->text('Direção:     ' . $temperature->getWindDirection());
+                $io->text('Data:        ' . $temperature->getDateTime()->format('d/m/Y H:i:s'));
+            }
+            
             $io->newLine();
 
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->title('Error');
             $io->error($e->getMessage());
-            $this->logger->error($this->climaTempoHelper->getError());
-            
+            //$this->logger->error($this->climaTempoHelper->getError());
+
             return Command::FAILURE;
         }
     }
@@ -119,15 +128,9 @@ class TemperatureRegisterCommand extends Command
         $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
 
         /** @var City $city */
-        $city = $this->cityRepository->listCitySelected()[0];
+        $city = $this->cityRepository->listCitySelected();
 
         $weather = $this->climaTempoHelper->weather($city->getId(), $token->getParamValue());
-
-        if ($this->climaTempoHelper->getError()) {
-            throw new Exception($this->climaTempoHelper->getError(), 0);
-
-            return null;
-        }
 
         return $weather;
     }
