@@ -26,7 +26,7 @@ class TokenConfigurationController extends AbstractController
 
     public function __construct(
         ConfigurationRepository $configurationRepository,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->configurationRepository = $configurationRepository;
         $this->translator = $translator;
@@ -54,8 +54,8 @@ class TokenConfigurationController extends AbstractController
         }
 
         return $this->render('tokenConfiguration/index.html.twig', [
-                    'token' => $token,
-                    'form' => $form,
+            'token' => $token,
+            'form' => $form,
         ]);
     }
 }

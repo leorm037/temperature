@@ -15,19 +15,17 @@ use App\Message\ErrorMessage;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Mime\Address;
 
 #[AsMessageHandler]
 final class ErrorMessageHandler
 {
-
     private MailerInterface $mailer;
-    
+
     public function __construct(MailerInterface $mailer)
     {
         $this->mailer = $mailer;
     }
-    
+
     public function __invoke(ErrorMessage $message)
     {
         $email = new TemplatedEmail();

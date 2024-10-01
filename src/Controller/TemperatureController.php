@@ -40,12 +40,12 @@ class TemperatureController extends AbstractController
     public function jsonDays(Request $request): JsonResponse
     {
         $days = intval($request->get('days', 1));
-        
+
         $temperatures = $this->temperatureRepository->findByDays($days);
 
         return $this->json([
-                    'message' => 'success',
-                    'result' => $temperatures,
+            'message' => 'success',
+            'result' => $temperatures,
         ]);
     }
 
@@ -60,8 +60,8 @@ class TemperatureController extends AbstractController
         $message = (null === $temperature) ? 'fail' : 'success';
 
         return $this->json([
-                    'message' => $message,
-                    'result' => $temperature,
+            'message' => $message,
+            'result' => $temperature,
         ]);
     }
 

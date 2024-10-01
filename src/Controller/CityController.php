@@ -26,7 +26,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CityController extends AbstractController
 {
-
     private CityRepository $cityRepository;
     private TranslatorInterface $translator;
     private ClimaTempoHelper $climaTempoHelper;
@@ -34,13 +33,12 @@ class CityController extends AbstractController
     private MessageBusInterface $messageBus;
 
     public function __construct(
-            CityRepository $cityRepository,
-            TranslatorInterface $translator,
-            ClimaTempoHelper $climaTempoHelper,
-            ConfigurationRepository $configurationRepository,
-            MessageBusInterface $messageBus
-    )
-    {
+        CityRepository $cityRepository,
+        TranslatorInterface $translator,
+        ClimaTempoHelper $climaTempoHelper,
+        ConfigurationRepository $configurationRepository,
+        MessageBusInterface $messageBus,
+    ) {
         $this->cityRepository = $cityRepository;
         $this->translator = $translator;
         $this->climaTempoHelper = $climaTempoHelper;
@@ -89,16 +87,16 @@ class CityController extends AbstractController
         }
 
         return $this->render('city/index.html.twig', [
-                    'countries' => $countries,
-                    'country' => $country,
-                    'states' => $states,
-                    'state' => $state,
-                    'cityName' => $cityName,
-                    'cities' => $cities,
-                    'page' => $page,
-                    'pages' => $pages,
-                    'registers' => $registers,
-                    'count' => $count,
+            'countries' => $countries,
+            'country' => $country,
+            'states' => $states,
+            'state' => $state,
+            'cityName' => $cityName,
+            'cities' => $cities,
+            'page' => $page,
+            'pages' => $pages,
+            'registers' => $registers,
+            'count' => $count,
         ]);
     }
 
@@ -124,25 +122,25 @@ class CityController extends AbstractController
 
         if ($this->climaTempoHelper->getError()) {
             $this->addFlash('danger', $this->climaTempoHelper->getError());
-            
-            $this->messageBus->dispatch(new ErrorMessage(0,$this->climaTempoHelper->getError()));
+
+            $this->messageBus->dispatch(new ErrorMessage(0, $this->climaTempoHelper->getError()));
         }
 
         if (isset($climaTempo->error)) {
             $this->addFlash('danger', $climaTempo->detail);
-            
-            $this->messageBus->dispatch(new ErrorMessage(0,$climaTempo->detail));
+
+            $this->messageBus->dispatch(new ErrorMessage(0, $climaTempo->detail));
         }
 
         if (isset($climaTempo->status)) {
             $city = $this->cityRepository->select($id);
-            
-            $this->addFlash('success', 'Locales: ' . implode(',', $climaTempo->locales));
+
+            $this->addFlash('success', 'Locales: '.implode(',', $climaTempo->locales));
 
             $this->addFlash('success', $this->translator->trans('message.city.select.success', [
-                        'city' => $city->getName(),
-                        'state' => $city->getState(),
-                        'country' => $city->getCountry(),
+                'city' => $city->getName(),
+                'state' => $city->getState(),
+                'country' => $city->getCountry(),
             ]));
 
             $this->messageBus->dispatch(new SelectedCityMessage($city));

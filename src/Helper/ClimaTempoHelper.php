@@ -11,18 +11,15 @@
 
 namespace App\Helper;
 
-use App\Entity\City;
 use Psr\Log\LoggerInterface;
-use stdClass;
 
 class ClimaTempoHelper
 {
-
     private const URL_CITY_ADD = 'http://apiadvisor.climatempo.com.br/api-manager/user-token/:your-app-token/locales';
     private const URL_CITY_FIND = 'http://apiadvisor.climatempo.com.br/api/v1/locale/city?country=:country&token=:your-app-token';
     private const URL_CITY_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/:city/current?token=:your-app-token&salt=:salt';
 
-    private $error = null;
+    private $error;
     private LoggerInterface $logger;
 
     public function __construct(LoggerInterface $logger)
@@ -31,9 +28,6 @@ class ClimaTempoHelper
     }
 
     /**
-     * 
-     * @param City $city
-     * @param string $token
      * @return array<string,string>
      */
     public function addCity(int $cityId, string $token)
@@ -67,9 +61,6 @@ class ClimaTempoHelper
     }
 
     /**
-     * 
-     * @param string $country
-     * @param string $token
      * @return <string,string>
      */
     public function findCities(string $country, string $token)
@@ -92,9 +83,10 @@ class ClimaTempoHelper
         if ($this->error) {
             $this->logger->error($this->error, $request);
         }
-        
-        if(isset($request['error']) && $request['error']) {
+
+        if (isset($request['error']) && $request['error']) {
             $this->error = $request['detail'];
+
             return null;
         }
 
@@ -102,9 +94,6 @@ class ClimaTempoHelper
     }
 
     /**
-     * 
-     * @param int $cityId
-     * @param string $token
      * @return array<string,string>
      */
     public function weather(int $cityId, string $token)
@@ -119,7 +108,7 @@ class ClimaTempoHelper
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
         $request = curl_exec($handle);
-        
+
         $result = json_decode($request, true);
 
         curl_close($handle);
@@ -128,11 +117,13 @@ class ClimaTempoHelper
 
         if ($this->error) {
             $this->logger->error($this->error, ['request' => $request]);
+
             return null;
         }
-        
-        if(isset($result['error']) && $result['error']) {
+
+        if (isset($result['error']) && $result['error']) {
             $this->error = $result['detail'];
+
             return null;
         }
 

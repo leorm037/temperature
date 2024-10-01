@@ -14,7 +14,6 @@ namespace App\EventSubscriber;
 use App\Message\ErrorMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -23,28 +22,28 @@ class ExceptionSubscriber implements EventSubscriberInterface
 {
     private LoggerInterface $logger;
     private MessageBusInterface $messageBus;
-    
+
     public function __construct(
-            LoggerInterface $logger, 
-            MessageBusInterface $messageBus
+        LoggerInterface $logger,
+        MessageBusInterface $messageBus,
     ) {
         $this->logger = $logger;
         $this->messageBus = $messageBus;
     }
-    
+
     public function onKernelException(ExceptionEvent $event): void
     {
         $code = $event->getThrowable()->getCode();
         $file = $event->getThrowable()->getFile();
         $line = $event->getThrowable()->getLine();
         $message = $event->getThrowable()->getMessage();
-        
+
         $this->logger->error($message, [
             'code' => $code,
             'file' => $file,
-            'line' => $line
+            'line' => $line,
         ]);
-              
+
         $this->messageBus->dispatch(new ErrorMessage($code, $message, $file, $line));
     }
 

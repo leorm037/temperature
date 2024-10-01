@@ -20,14 +20,13 @@ use Symfony\Component\Mime\Address;
 #[AsMessageHandler]
 final class SelectedCityMessageHandler
 {
-
     private MailerInterface $mailer;
-    
+
     public function __construct(MailerInterface $mailer)
     {
         $this->mailer = $mailer;
     }
-    
+
     public function __invoke(SelectedCityMessage $message)
     {
         $email = (new TemplatedEmail())

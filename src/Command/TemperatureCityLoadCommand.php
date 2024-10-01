@@ -16,7 +16,6 @@ use App\Factory\CityFactory;
 use App\Helper\ClimaTempoHelper;
 use App\Repository\CityRepository;
 use App\Repository\ConfigurationRepository;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,20 +24,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-            name: 'temperature:city:load',
-            description: 'Loads the list of cities from the abbreviation of the informed country.',
-    )]
+    name: 'temperature:city:load',
+    description: 'Loads the list of cities from the abbreviation of the informed country.',
+)]
 class TemperatureCityLoadCommand extends Command
 {
-
     private CityRepository $cityRepository;
     private ClimaTempoHelper $climaTempoHelper;
     private ConfigurationRepository $configurationRepository;
 
     public function __construct(
-            CityRepository $cityRepository,
-            ClimaTempoHelper $climaTempoHelper,
-            ConfigurationRepository $configurationRepository
+        CityRepository $cityRepository,
+        ClimaTempoHelper $climaTempoHelper,
+        ConfigurationRepository $configurationRepository,
     ) {
         parent::__construct();
 
@@ -63,16 +61,18 @@ class TemperatureCityLoadCommand extends Command
 
         if (null == $token && null !== $token->getParamValue()) {
             $io->error('Token não cadastrado');
+
             return Command::FAILURE;
         }
-        
+
         $citiesJson = $this->climaTempoHelper->findCities($country, $token->getParamValue());
-        
+
         if ($this->climaTempoHelper->getError()) {
             $io->error($this->climaTempoHelper->getError());
+
             return Command::FAILURE;
         }
-        
+
         $cities = json_decode($citiesJson);
 
         $citiesCount = count($cities);

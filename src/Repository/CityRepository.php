@@ -18,7 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @extends ServiceEntityRepository<City>
@@ -30,17 +29,15 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class CityRepository extends ServiceEntityRepository
 {
-
     private KernelInterface $kernel;
 
     public function __construct(
-            ManagerRegistry $registry,
-//            KernelInterface $kernel,
-    )
-    {
+        ManagerRegistry $registry,
+        //            KernelInterface $kernel,
+    ) {
         parent::__construct($registry, City::class);
 
-//        $this->kernel = $kernel;
+        //        $this->kernel = $kernel;
     }
 
     public function save(City $entity, bool $flush = false): void
@@ -70,15 +67,15 @@ class CityRepository extends ServiceEntityRepository
         $city->setSelected(true);
         $this->save($city, true);
 
-//        $application = new Application($this->kernel);
-//        $application->setAutoExit(false);
-//        
-//        $input = new ArrayInput([
-//            'command' => 'cache:pool:clear',
-//            'pools' => ['cache.doctrine.orm.default.result'],
-//        ]);
-//        
-//        $application->run($input);
+        //        $application = new Application($this->kernel);
+        //        $application->setAutoExit(false);
+        //
+        //        $input = new ArrayInput([
+        //            'command' => 'cache:pool:clear',
+        //            'pools' => ['cache.doctrine.orm.default.result'],
+        //        ]);
+        //
+        //        $application->run($input);
 
         return $city;
     }
@@ -118,7 +115,7 @@ class CityRepository extends ServiceEntityRepository
     /**
      * @return City[]
      */
-    public function listCityFromCountryAndState(string $country, string $state, string $name = null, int $firstResult = 1, int $maxResults = 10)
+    public function listCityFromCountryAndState(string $country, string $state, ?string $name = null, int $firstResult = 1, int $maxResults = 10)
     {
         $query = $this->createQueryBuilder('c')
                 ->where('c.state = :state')
@@ -127,7 +124,7 @@ class CityRepository extends ServiceEntityRepository
 
         if (null != $name) {
             $query->andWhere('c.name like :name')
-                    ->setParameter('name', '%' . $name . '%')
+                    ->setParameter('name', '%'.$name.'%')
             ;
         }
 
@@ -137,7 +134,6 @@ class CityRepository extends ServiceEntityRepository
                 ->orderBy('c.name', 'ASC')
                 ->getQuery()
                 ->enableResultCache(3600);
-        ;
 
         return new Paginator($query);
     }
@@ -156,8 +152,6 @@ class CityRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $state
-     *
      * @return City[]
      */
     public function findByCountryStateIdCity(?string $country, ?string $state, ?string $idCity)

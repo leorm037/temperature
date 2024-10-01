@@ -13,27 +13,19 @@ namespace App\Message;
 
 final class ErrorMessage
 {
-
     private $code;
     private $message;
     private $file;
     private $line;
 
-    /**
-     * 
-     * @param int $code
-     * @param string $message
-     * @param string|null $file
-     * @param int $line
-     */
-    public function __construct(int $code = 0, string $message, string|null $file = null, int $line = 0)
+    public function __construct(int $code = 0, string $message, ?string $file = null, int $line = 0)
     {
         $this->code = $code;
         $this->message = $message;
         $this->file = $file;
         $this->line = $line;
     }
-    
+
     public function getCode()
     {
         return $this->code;
@@ -54,13 +46,13 @@ final class ErrorMessage
         return $this->line;
     }
 
-//     private $name;
-//     public function __construct(string $name)
-//     {
-//         $this->name = $name;
-//     }
-//    public function getName(): string
-//    {
-//        return $this->name;
-//    }
+    //     private $name;
+    //     public function __construct(string $name)
+    //     {
+    //         $this->name = $name;
+    //     }
+    //    public function getName(): string
+    //    {
+    //        return $this->name;
+    //    }
 }

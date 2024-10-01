@@ -25,7 +25,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TemperatureRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Temperature::class);
@@ -79,7 +78,7 @@ class TemperatureRepository extends ServiceEntityRepository
                         ->select("DATE_FORMAT(t.dateTime, '%Y-%m-%d %H:00:00') AS dateTime, AVG(t.cpu) AS cpu, AVG(t.gpu) AS gpu, AVG(t.sensation) AS sensation, AVG(t.temperature) AS temperature")
                         ->where('t.dateTime >= :date')
                         ->setParameter('date', $dateFormat)
-                        ->addGroupBy("dateTime")
+                        ->addGroupBy('dateTime')
                         ->orderBy('dateTime', 'DESC')
                         ->getQuery()
                         ->enableResultCache(300)
