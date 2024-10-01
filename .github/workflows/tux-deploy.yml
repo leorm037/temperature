@@ -15,19 +15,19 @@ jobs:
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.TUX_HOST }}
-          port: ${{ secrets.TUX_SSH_PORT }}
-          username: ${{ secrets.TUX_USERNAME }}
-          key: ${{ secrets.TUX_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
           source: "."
           target: "/deploy/temperature"
       - name: "Construção da aplicação"
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.TUX_HOST }}
-          username: ${{ secrets.TUX_USERNAME }}
-          key: ${{ secrets.TUX_SSH_PRIVATE_KEY }}
-          port: ${{ secrets.TUX_SSH_PORT }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
           script: |            
             cd /deploy/temperature
             composer install --no-dev --no-progress -a -o
