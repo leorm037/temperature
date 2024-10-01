@@ -8,6 +8,10 @@ $.LoadingOverlaySetup({
 
 $(document).ajaxStart(function () {
     $.LoadingOverlay("show");
+    
+    setTimeout(function () {
+        $.LoadingOverlay("hide");
+    }, 5000);
 });
 
 $(document).ajaxStop(function () {
