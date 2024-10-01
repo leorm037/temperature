@@ -32,13 +32,14 @@ class CityRepository extends ServiceEntityRepository
 {
 
     private KernelInterface $kernel;
-    
+
     public function __construct(
             ManagerRegistry $registry,
 //            KernelInterface $kernel,
-    ) {
+    )
+    {
         parent::__construct($registry, City::class);
-        
+
 //        $this->kernel = $kernel;
     }
 
@@ -68,7 +69,7 @@ class CityRepository extends ServiceEntityRepository
         $city = $this->find($id);
         $city->setSelected(true);
         $this->save($city, true);
-        
+
 //        $application = new Application($this->kernel);
 //        $application->setAutoExit(false);
 //        
@@ -148,8 +149,9 @@ class CityRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
                         ->where('c.selected = 1')
+                        ->setMaxResults(1)
                         ->getQuery()
-                        ->getResult()
+                        ->getOneOrNullResult()
         ;
     }
 

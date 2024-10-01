@@ -17,5 +17,11 @@ $(document).ajaxStop(function () {
 $('a[data-loading],button[data-loading]').each(function () {
     $(this).click(function () {
         $.LoadingOverlay("show");
+        
+        if ($(this).data('loading')) {
+            setTimeout(function () {
+                $.LoadingOverlay("hide");
+            }, 5000);
+        }
     });
 });

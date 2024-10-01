@@ -11,8 +11,8 @@
 
 namespace App\Factory;
 
-use App\Entity\City;
 use App\Entity\Temperature;
+use App\Helper\DateTimeHelper;
 use App\Repository\CityRepository;
 use DateTime;
 use DateTimeZone;
@@ -30,6 +30,10 @@ class TemperatureFactory
     public function build($climaTempo): Temperature
     {
         $temperature = new Temperature();
+        
+        if (null === $climaTempo) {
+            return $temperature->setDateTime(DateTimeHelper::currentDateTimeLocale());
+        }
 
         $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $climaTempo['data']['date'], new DateTimeZone('America/Sao_Paulo'));
         

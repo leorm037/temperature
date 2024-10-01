@@ -14,6 +14,9 @@
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
         
         <title>{% block title %}Temperature{% endblock %}</title>
+        
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+        
         {% block stylesheets %}
             
             <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
