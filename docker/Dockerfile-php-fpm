@@ -14,4 +14,6 @@ RUN docker-php-ext-install gd
 
 RUN docker-php-ext-install mbstring
 
+ADD ./etc/php-fpm/php.ini-production /usr/local/etc/php/php.ini
+
 WORKDIR /app

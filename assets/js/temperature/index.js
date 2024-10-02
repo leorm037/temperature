@@ -80,25 +80,65 @@ function graphicConstruct(tempArray) {
                         let dJson = data.result.dateTime.replace("+00:00", "");
                         let d = new Date(dJson);
 
-                        modalCity.text(data.result.city.name + "/" + data.result.city.state + " - " + data.result.city.country); //00
+                        console.log(data.result.city);
+
+                        if (null == data.result.city) {
+                            modalCity.text('-');
+                        } else {
+                            modalCity.text(data.result.city.name + "/" + data.result.city.state + " - " + data.result.city.country); //00
+                        }
                         modalDateTime.text(d.toLocaleDateString() + " " + d.toLocaleTimeString());                     //01
+                        
                         modalCpu.text(parseFloat(data.result.cpu).toLocaleString(LOCALE) + " ºC");                     //02
                         modalGpu.text(parseFloat(data.result.gpu).toLocaleString(LOCALE) + " ºC");                     //03
-                        modalSensation.text(parseFloat(data.result.sensation).toLocaleString(LOCALE) + " ºC");         //04
-                        modalTemperature.text(parseFloat(data.result.temperature).toLocaleString(LOCALE) + " ºC");     //05
-                        modalWindDirection.text(data.result.windDirection);                                            //06
-                        modalWindVelocity.text(parseFloat(data.result.windVelocity).toLocaleString(LOCALE) + " km/h"); //07
-                                                
-                        modalHumidity.text(parseFloat(data.result.humidity).toLocaleString(LOCALE) + "%");             //08
+                        
+                        if (null == data.result.sensation) {
+                            modalSensation.text('-');
+                        } else {
+                            modalSensation.text(parseFloat(data.result.sensation).toLocaleString(LOCALE) + " ºC");         //04
+                        }
+                        
+                        if (null == data.result.temperature) {
+                            modalTemperature.text('-');
+                        } else {
+                            modalTemperature.text(parseFloat(data.result.temperature).toLocaleString(LOCALE) + " ºC");     //05
+                        }
+                        
+                        if (null == data.result.windDirection) {
+                            modalWindDirection.text('-');
+                        } else {
+                            modalWindDirection.text(data.result.windDirection);                                            //06
+                        }
+                        
+                        if (null == data.result.windVelocity) {
+                            modalWindVelocity.text('-');
+                        } else {    
+                            modalWindVelocity.text(parseFloat(data.result.windVelocity).toLocaleString(LOCALE) + " km/h"); //07
+                        }
+                        
+                        if (null == data.result.humidity) {
+                            modalHumidity.text('-');
+                        } else {
+                            modalHumidity.text(parseFloat(data.result.humidity).toLocaleString(LOCALE) + "%");             //08
+                        }
                         
                         if (parseFloat(data.result.humidity) >= 30.0) {
                             modalHumidity.parent('tr').removeClass('table-danger');
                         } else {
                             modalHumidity.parent('tr').addClass('table-danger');
                         }
+
+                        if (null == data.result.weatherCondition) {
+                            modalWeatherCondition.html('-');
+                        } else {
+                            modalWeatherCondition.html(data.result.weatherCondition + " <img src='" + BASE_URL + "/realistic/70px/" + data.result.icon + ".png'>");                                      //09
+                        }
                         
-                        modalWeatherCondition.html(data.result.weatherCondition + " <img src='" + BASE_URL + "/realistic/70px/" + data.result.icon + ".png'>");                                      //09
-                        modalPressure.text(parseFloat(data.result.pressure).toLocaleString(LOCALE) + " hPa");          //10
+                        if (null == data.result.pressure) {
+                            modalPressure.text('-');
+                        } else {
+                            modalPressure.text(parseFloat(data.result.pressure).toLocaleString(LOCALE) + " hPa");          //10
+                        }
                     } else {
                         console.log("Fail", dateTimeLabel);
                     }
@@ -139,7 +179,7 @@ function graphicConstruct(tempArray) {
             }
         }
     };
-    
+
     if (null === graphic) {
         graphic = new Chart(document.getElementById('temperature'), config);
     } else {
@@ -150,8 +190,8 @@ function graphicConstruct(tempArray) {
 
 function updateLastTemperature() {
     $.get(
-        URL_JSON_LAST_TEMPERATURE
-    ).done(function (data, textStatus, jqXHR) {
+            URL_JSON_LAST_TEMPERATURE
+            ).done(function (data, textStatus, jqXHR) {
         let temperature = parseFloat(data.result);
         //let sensation = parseFloat(lastTemperature.sensation);
 

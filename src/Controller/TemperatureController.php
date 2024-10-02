@@ -53,7 +53,7 @@ class TemperatureController extends AbstractController
     {
         $dateString = $request->get('dateTime');
 
-        $date = DateTimeHelper::dateTimeString($dateString, 'America/Sao_Paulo');
+        $date = DateTimeHelper::dateTimeString($dateString);
 
         $temperature = $this->temperatureRepository->findByDate($date);
 
