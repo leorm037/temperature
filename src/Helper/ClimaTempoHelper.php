@@ -116,7 +116,7 @@ class ClimaTempoHelper
         $this->error = curl_error($handle);
 
         if ($this->error) {
-            $this->logger->error($this->error, ['request' => $request]);
+            $this->logger->error($this->error, ['request' => $request, 'URL' => $url]);
 
             return null;
         }

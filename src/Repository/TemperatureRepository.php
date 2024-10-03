@@ -58,7 +58,7 @@ class TemperatureRepository extends ServiceEntityRepository
         $dateFormat = $date->format('Y-m-d H:i:s');
 
         return $this->createQueryBuilder('t')
-                        ->select('t.dateTime, t.cpu, t.gpu, t.sensation, t.temperature')
+                        ->select('t.dateTime, t.cpu, t.gpu, t.sensation, t.temperature, t.ambiente')
                         ->where('t.dateTime >= :date')
                         ->setParameter('date', $dateFormat)
                         ->orderBy('t.dateTime', 'DESC')

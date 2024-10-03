@@ -67,6 +67,9 @@ class Temperature extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?City $city = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $ambiente = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -236,6 +239,18 @@ class Temperature extends AbstractEntity
     public function setCity(?City $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getAmbiente(): ?float
+    {
+        return $this->ambiente;
+    }
+
+    public function setAmbiente(?float $ambiente): static
+    {
+        $this->ambiente = $ambiente;
 
         return $this;
     }

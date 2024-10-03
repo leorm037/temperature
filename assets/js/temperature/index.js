@@ -4,6 +4,7 @@ function graphicConstruct(tempArray) {
     var labels = [];
     var cpu = [];
     var gpu = [];
+    var ambiente = [];
     var sensation = [];
     var temperature = [];
 
@@ -14,6 +15,7 @@ function graphicConstruct(tempArray) {
         labels.push(date.toLocaleDateString() + " " + date.toLocaleTimeString());
         cpu.push(parseFloat(t.cpu));
         gpu.push(parseFloat(t.gpu));
+        ambiente.push(parseFloat(t.ambiente));
         sensation.push(parseFloat(t.sensation));
         temperature.push(parseFloat(t.temperature));
     });
@@ -40,6 +42,12 @@ function graphicConstruct(tempArray) {
                 data: temperature
             },
             {
+                label: 'Ambiente',
+                backgroundColor: 'rgba(255,165,0,0.5)',
+                borderColor: 'rgb(255,165,0)',
+                data: ambiente
+            },
+            {
                 label: 'Sensation',
                 backgroundColor: 'rgba(255,99,132,0.5)',
                 borderColor: 'rgb(255,99,132)',
@@ -63,6 +71,7 @@ function graphicConstruct(tempArray) {
                 modalCpu = $('#modalCpu').html(TAG_SPINNER);                           //02
                 modalGpu = $('#modalGpu').html(TAG_SPINNER);                           //03
                 modalSensation = $('#modalSensation').html(TAG_SPINNER);               //04
+                modalAmbiente = $('#modalAmbiente').html(TAG_SPINNER);           //05
                 modalTemperature = $('#modalTemperature').html(TAG_SPINNER);           //05
                 modalWindDirection = $('#modalWindDirection').html(TAG_SPINNER);       //06
                 modalWindVelocity = $('#modalWindVelocity').html(TAG_SPINNER);         //07
@@ -80,8 +89,6 @@ function graphicConstruct(tempArray) {
                         let dJson = data.result.dateTime.replace("+00:00", "");
                         let d = new Date(dJson);
 
-                        console.log(data.result.city);
-
                         if (null == data.result.city) {
                             modalCity.text('-');
                         } else {
@@ -91,6 +98,7 @@ function graphicConstruct(tempArray) {
                         
                         modalCpu.text(parseFloat(data.result.cpu).toLocaleString(LOCALE) + " ºC");                     //02
                         modalGpu.text(parseFloat(data.result.gpu).toLocaleString(LOCALE) + " ºC");                     //03
+                        modalAmbiente.text(parseFloat(data.result.ambiente).toLocaleString(LOCALE) + " ºC");                     //03
                         
                         if (null == data.result.sensation) {
                             modalSensation.text('-');
