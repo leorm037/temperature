@@ -36,16 +36,16 @@ function graphicConstruct(tempArray) {
                 data: gpu
             },
             {
-                label: 'Temperature',
-                backgroundColor: 'rgba(0,100,255,0.5)',
-                borderColor: 'rgb(0,100,255)',
-                data: temperature
-            },
-            {
                 label: 'Ambiente',
                 backgroundColor: 'rgba(255,165,0,0.5)',
                 borderColor: 'rgb(255,165,0)',
                 data: ambiente
+            },
+            {
+                label: 'Temperature',
+                backgroundColor: 'rgba(0,100,255,0.5)',
+                borderColor: 'rgb(0,100,255)',
+                data: temperature
             },
             {
                 label: 'Sensation',
