@@ -22,3 +22,12 @@
 ```
 php bin/console translation:extract --force --dump-messages --format=yaml --sort=asc pt_BR
 ```
+
+## PCSensor Temper
+```
+sudo apt install git build-essential libusb-dev
+git clone "https://github.com/leorm037/pcsensor-temper.git"
+cd "pcsensor-temper" && make all
+
+sudo cp pcsensor /user/local/bin/pcsensor
+``` 

@@ -28,12 +28,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsCommand(
-            name: 'temperature:register',
-            description: 'Records CPU temperature, GPU and Weather Weather.',
-    )]
+    name: 'temperature:register',
+    description: 'Records CPU temperature, GPU and Weather Weather.',
+)]
 class TemperatureRegisterCommand extends Command
 {
-
     public const URL_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/';
     private const TEMP_CPU_COMMAND = 'cat /sys/class/thermal/thermal_zone0/temp';
     private const TEMP_GPU_COMMAND = '/usr/bin/vcgencmd measure_temp';
@@ -49,16 +48,15 @@ class TemperatureRegisterCommand extends Command
     private ConfigurationRepository $configurationRepository;
 
     public function __construct(
-            KernelInterface $kernel,
-            LoggerInterface $logger,
-            ClimaTempoHelper $climaTempoHelper,
-            CityRepository $cityRepository,
-            MessageBusInterface $messageBus,
-            TemperatureFactory $temperatureFactory,
-            TemperatureRepository $temperatureRepository,
-            ConfigurationRepository $configurationRepository,
-    )
-    {
+        KernelInterface $kernel,
+        LoggerInterface $logger,
+        ClimaTempoHelper $climaTempoHelper,
+        CityRepository $cityRepository,
+        MessageBusInterface $messageBus,
+        TemperatureFactory $temperatureFactory,
+        TemperatureRepository $temperatureRepository,
+        ConfigurationRepository $configurationRepository,
+    ) {
         parent::__construct();
 
         $this->kernel = $kernel;
@@ -73,7 +71,6 @@ class TemperatureRegisterCommand extends Command
 
     protected function configure(): void
     {
-        
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -94,21 +91,21 @@ class TemperatureRegisterCommand extends Command
             $io->title('Temperature');
 
             if (null !== $temperature->getCity()) {
-                $io->text('Cidade:      ' . $temperature->getCity()->getName() . '/' . $temperature->getCity()->getState() . ' - ' . $temperature->getCity()->getCountry());
+                $io->text('Cidade:      '.$temperature->getCity()->getName().'/'.$temperature->getCity()->getState().' - '.$temperature->getCity()->getCountry());
             }
 
-            $io->text('CPU:         ' . $temperature->getCpu());
-            $io->text('GPU:         ' . $temperature->getGpu());
-            $io->text('Ambiente:    ' . $temperature->getAmbiente());
+            $io->text('CPU:         '.$temperature->getCpu());
+            $io->text('GPU:         '.$temperature->getGpu());
+            $io->text('Ambiente:    '.$temperature->getAmbiente());
 
             if (null !== $temperature->getTemperature()) {
-                $io->text('Temperatura: ' . $temperature->getTemperature());
-                $io->text('Sensação:    ' . $temperature->getSensation());
-                $io->text('Humidade:    ' . $temperature->getHumidity());
-                $io->text('Pressão:     ' . $temperature->getPressure());
-                $io->text('Velocidade:  ' . $temperature->getWindVelocity());
-                $io->text('Direção:     ' . $temperature->getWindDirection());
-                $io->text('Data:        ' . $temperature->getDateTime()->format('d/m/Y H:i:s'));
+                $io->text('Temperatura: '.$temperature->getTemperature());
+                $io->text('Sensação:    '.$temperature->getSensation());
+                $io->text('Humidade:    '.$temperature->getHumidity());
+                $io->text('Pressão:     '.$temperature->getPressure());
+                $io->text('Velocidade:  '.$temperature->getWindVelocity());
+                $io->text('Direção:     '.$temperature->getWindDirection());
+                $io->text('Data:        '.$temperature->getDateTime()->format('d/m/Y H:i:s'));
             }
 
             $io->newLine();
