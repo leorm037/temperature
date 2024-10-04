@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="public/android-chrome-512x512.png" width=256 alt="Temperature">
+  <img src="assets/favicon/android-chrome-512x512.png" width=256 alt="Temperature">
   <br />
   Temperature
 </h1>
