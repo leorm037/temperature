@@ -171,7 +171,8 @@ class TemperatureRegisterCommand extends Command
         $result = floatval($tempPcsensor);
 
         if (!is_float($result) && $retry) {
-             return $this->pcsensor(false);
+            sleep(5); 
+            return $this->pcsensor(false);
         }
         
         if (!is_float($result)) {            
