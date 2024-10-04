@@ -168,12 +168,14 @@ class TemperatureRegisterCommand extends Command
 
         $tempPcsensor = shell_exec(self::TEMP_PCSENSOR_TEMPER_COMMAND);
         
-        if (!is_float($tempPcsensor)) {
+        $result = floatval($tempPcsensor);
+        
+        if (!is_float($result)) {
             $message = sprintf('PCSensor Temper retornou o valor %s que não é um número decimal', $tempPcsensor);
             
             $this->logger->error($message);
         }
 
-        return floatval($tempPcsensor);
+        return $result;
     }
 }
