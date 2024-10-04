@@ -36,7 +36,7 @@ class TemperatureRegisterCommand extends Command
     public const URL_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/';
     private const TEMP_CPU_COMMAND = 'cat /sys/class/thermal/thermal_zone0/temp';
     private const TEMP_GPU_COMMAND = '/usr/bin/vcgencmd measure_temp';
-    private const TEMP_PCSENSOR_TEMPER_COMMAND = 'sudo pcsensor -c -p';
+    private const TEMP_PCSENSOR_TEMPER_COMMAND = 'sudo pcsensor -c -p -n0';
 
     private KernelInterface $kernel;
     private LoggerInterface $logger;
@@ -128,6 +128,10 @@ class TemperatureRegisterCommand extends Command
         $city = $this->cityRepository->listCitySelected();
 
         $weather = $this->climaTempoHelper->weather($city->getId(), $token->getParamValue());
+        
+        if ($this->climaTempoHelper->getError()) {
+            $this->logger->error($this->climaTempoHelper->getError());
+        }
 
         return $weather;
     }
@@ -163,6 +167,12 @@ class TemperatureRegisterCommand extends Command
         }
 
         $tempPcsensor = shell_exec(self::TEMP_PCSENSOR_TEMPER_COMMAND);
+        
+        if (!is_float($tempPcsensor)) {
+            $message = sprintf('PCSensor Temper retornou o valor %s que não é um número decimal', $tempPcsensor);
+            
+            $this->logger->error($message);
+        }
 
         return floatval($tempPcsensor);
     }

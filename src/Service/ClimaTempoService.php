@@ -9,22 +9,24 @@
  * with this source code in the file LICENSE.
  */
 
-namespace App\Helper;
+namespace App\Service;
 
 use Psr\Log\LoggerInterface;
 
-class ClimaTempoHelper
+class ClimaTempoService
 {
+
     private const URL_CITY_ADD = 'http://apiadvisor.climatempo.com.br/api-manager/user-token/:your-app-token/locales';
     private const URL_CITY_FIND = 'http://apiadvisor.climatempo.com.br/api/v1/locale/city?country=:country&token=:your-app-token';
     private const URL_CITY_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/:city/current?token=:your-app-token&salt=:salt';
 
-    private $error;
-    private LoggerInterface $logger;
+    private ?array $error = null;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(
+            private LoggerInterface $logger
+    )
     {
-        $this->logger = $logger;
+        
     }
 
     /**
@@ -51,7 +53,7 @@ class ClimaTempoHelper
 
         curl_close($handle);
 
-        $this->error = curl_error($handle);
+        $this->error[] = curl_error($handle);
 
         if ($this->error) {
             $this->logger->error($this->error, $request);
@@ -78,14 +80,14 @@ class ClimaTempoHelper
 
         curl_close($handle);
 
-        $this->error = curl_error($handle);
+        $this->error[] = curl_error($handle);
 
         if ($this->error) {
             $this->logger->error($this->error, $request);
         }
 
         if (isset($request['error']) && $request['error']) {
-            $this->error = $request['detail'];
+            $this->error[] = $request['detail'];
 
             return null;
         }
@@ -113,14 +115,14 @@ class ClimaTempoHelper
 
         curl_close($handle);
 
-        $this->error = curl_error($handle);
+        $this->error[] = curl_error($handle);
 
         if ($this->error) {
             return null;
         }
 
         if (isset($result['error']) && $result['error']) {
-            $this->error = $result['detail'];
+            $this->error[] = $result['detail'];
 
             return null;
         }
@@ -128,7 +130,7 @@ class ClimaTempoHelper
         return $result;
     }
 
-    public function getError(): ?string
+    public function getError(): ?array
     {
         return $this->error;
     }
