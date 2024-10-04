@@ -160,7 +160,7 @@ class TemperatureRegisterCommand extends Command
         return floatval($temp);
     }
 
-    private function pcsensor(): float
+    private function pcsensor(bool $retry = true): float
     {
         if ('dev' === $this->kernel->getEnvironment()) {
             return floatval(random_int(28, 33));
@@ -169,8 +169,12 @@ class TemperatureRegisterCommand extends Command
         $tempPcsensor = shell_exec(self::TEMP_PCSENSOR_TEMPER_COMMAND);
         
         $result = floatval($tempPcsensor);
+
+        if (!is_float($result) && $retry) {
+             return $this->pcsensor(false);
+        }
         
-        if (!is_float($result)) {
+        if (!is_float($result)) {            
             $message = sprintf('PCSensor Temper retornou o valor %s que não é um número decimal', $tempPcsensor);
             
             $this->logger->error($message);
