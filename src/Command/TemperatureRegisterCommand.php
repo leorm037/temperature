@@ -170,12 +170,17 @@ class TemperatureRegisterCommand extends Command
         
         $result = floatval($tempPcsensor);
 
-        if (!is_float($result) && $retry) {
-            sleep(5); 
+        if ($result == 0 && $retry) {
+            sleep(5);
+            
+            $message = sprintf('Depois de sleep PCSensor Temper retornou o valor %s que não é um número decimal.', $tempPcsensor);
+            
+            $this->logger->error($message);
+            
             return $this->pcsensor(false);
         }
         
-        if (!is_float($result)) {            
+        if ($result == 0) {            
             $message = sprintf('PCSensor Temper retornou o valor %s que não é um número decimal', $tempPcsensor);
             
             $this->logger->error($message);
