@@ -19,8 +19,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |            
-            cd /deploy/temperature
+          script: |
             rm -R /deploy/temperature
             mkdir /deploy/temperature
       - name: "Copiar código"
@@ -39,7 +38,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |            
+          script: |
             cd /deploy/temperature
             composer install --no-dev --no-progress -a -o
             composer dump-env prod
