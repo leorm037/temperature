@@ -21,7 +21,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             rm -R /deploy/temperature
-            mkdir /deploy/temperature
+            mkdir /deploy/temperature4
+            cp /deploy/temperature.env.prod.local /deploy/temperature/.env.prod.local
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -39,6 +40,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+          
             cd /deploy/temperature
             composer install --no-dev --no-progress -a -o
             composer dump-env prod
