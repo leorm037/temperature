@@ -20,15 +20,13 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    private LoggerInterface $logger;
-    private MessageBusInterface $messageBus;
 
     public function __construct(
-        LoggerInterface $logger,
-        MessageBusInterface $messageBus,
-    ) {
-        $this->logger = $logger;
-        $this->messageBus = $messageBus;
+            private LoggerInterface $logger,
+            private MessageBusInterface $messageBus,
+    )
+    {
+        
     }
 
     public function onKernelException(ExceptionEvent $event): void

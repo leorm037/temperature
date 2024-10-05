@@ -32,9 +32,9 @@ jobs:
             cd /deploy/temperature
             composer install --no-dev --no-progress -a -o
             composer dump-env prod
+            sudo rm /var/www/temperature
             sudo cp -RTf /deploy/temperature/ /var/www/temperature
             cd /var/www/temperature
             APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear -q -n
-            sudo rm -R public/assets
             APP_ENV=prod APP_DEBUG=0 sudo php bin/console asset-map:compile
             sudo chown -R www-data: .

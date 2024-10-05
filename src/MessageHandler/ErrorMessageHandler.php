@@ -19,11 +19,10 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class ErrorMessageHandler
 {
-    private MailerInterface $mailer;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(private MailerInterface $mailer)
     {
-        $this->mailer = $mailer;
+        
     }
 
     public function __invoke(ErrorMessage $message)

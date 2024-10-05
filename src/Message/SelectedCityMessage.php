@@ -15,11 +15,10 @@ use App\Entity\City;
 
 final class SelectedCityMessage
 {
-    private City $city;
 
-    public function __construct(City $city)
+    public function __construct(private City $city)
     {
-        $this->city = $city;
+        
     }
 
     public function getCity(): City
