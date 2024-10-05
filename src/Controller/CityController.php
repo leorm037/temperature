@@ -22,8 +22,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[Route('/city', name: 'app_city_')]
 class CityController extends AbstractController
 {
     private CityRepository $cityRepository;
@@ -46,12 +48,11 @@ class CityController extends AbstractController
         $this->messageBus = $messageBus;
     }
 
-    public function index(Request $request): Response
+    #[Route('/', name: 'index', methods: ['GET', 'POST'])]
+    public function index(Request $request, $country = null, $state = null): Response
     {
         $countries = $this->cityRepository->listCountry();
-        $country = null;
         $states = null;
-        $state = null;
         $cityName = null;
         $cities = $this->cityRepository->listCitySelected();
         $page = 1;
@@ -100,6 +101,7 @@ class CityController extends AbstractController
         ]);
     }
 
+    #[Route('/states', name: 'states', methods: ['POST'])]
     public function statesJson(Request $request): JsonResponse
     {
         $country = $request->request->get('country');
@@ -111,6 +113,7 @@ class CityController extends AbstractController
         return $this->json(['message' => $message, 'states' => $states]);
     }
 
+    #[Route('/select/{cityId}', name: 'select', methods: ['GET'], requirements: ['cityId' => '\d+'])]
     public function selectCity(Request $request): Response
     {
         $id = $request->get('cityId');

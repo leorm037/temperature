@@ -17,21 +17,22 @@ use App\Repository\ConfigurationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[Route('/token', name: 'app_token_configuration_')]
 class TokenConfigurationController extends AbstractController
 {
-    private ConfigurationRepository $configurationRepository;
-    private TranslatorInterface $translator;
 
     public function __construct(
-        ConfigurationRepository $configurationRepository,
-        TranslatorInterface $translator,
-    ) {
-        $this->configurationRepository = $configurationRepository;
-        $this->translator = $translator;
+            private ConfigurationRepository $configurationRepository,
+            private TranslatorInterface $translator,
+    )
+    {
+        
     }
 
+    #[Route('', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $token = $this->configurationRepository->findByName(Configuration::CONFIGURATION_TOKEN);
@@ -54,8 +55,8 @@ class TokenConfigurationController extends AbstractController
         }
 
         return $this->render('tokenConfiguration/index.html.twig', [
-            'token' => $token,
-            'form' => $form,
+                    'token' => $token,
+                    'form' => $form,
         ]);
     }
 }

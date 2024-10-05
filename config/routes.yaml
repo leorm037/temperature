@@ -1,46 +1,5 @@
-#controllers:
-#    resource:
-#        path: ../src/Controller/
-#        namespace: App\Controller
-#    type: attribute
-
-app_configuration_controller:
-    resource: "routes/configuration.yaml"
-    prefix: /configuration
-
-app_city_controller:
-    resource: "routes/city.yaml"
-    prefix: /city
-    
-app_token_configuration_controller:
-    resource: "routes/tokenConfiguration.yaml"
-    prefix: /tokenConfiguration
-
-app_index:
-    path: /
-    controller: App\Controller\TemperatureController::index
-    methods: GET
-    
-app_temperature_days:
-    path: /days/{days}
-    controller: App\Controller\TemperatureController::days
-    methods: GET
-    requirements:
-        days: \d+
-    defaults:
-        days: 1
-
-app_temperature_json_days:
-    path: /json/days
-    controller: App\Controller\TemperatureController::jsonDays
-    methods: POST
-    
-app_temperature_json_last_temperature:
-    path: /json/last-temperature
-    controller: App\Controller\TemperatureController::jsonLastTemperature
-    methods: GET
-    
-app_temperature_json_detail:
-    path: /json/detail
-    controller: App\Controller\TemperatureController::jsonDetail
-    methods: POST
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute

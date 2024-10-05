@@ -173,11 +173,13 @@ class TemperatureRegisterCommand extends Command
         if ($result == 0 && $retry) {
             sleep(5);
             
+            $result = $this->pcsensor(false);
+            
             $message = sprintf('Depois de sleep PCSensor Temper retornou o valor %s que não é um número decimal.', $tempPcsensor);
             
-            $this->logger->error($message);
+            $this->logger->info($message);
             
-            return $this->pcsensor(false);
+            return $result;
         }
         
         if ($result == 0) {            
