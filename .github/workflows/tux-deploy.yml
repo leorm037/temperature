@@ -11,7 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Obter código"
-        uses: actions/checkout@v4        
+        uses: actions/checkout@v4
+      - name: "Limpar diretório de deploy"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |            
+            cd /deploy/temperature
+            rm -R /deploy/temperature
+            mkdir /deploy/temperature
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
