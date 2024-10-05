@@ -22,10 +22,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/', name: 'app_')]
 class TemperatureController extends AbstractController
 {
-
     public function __construct(private TemperatureRepository $temperatureRepository)
     {
-        
     }
 
     #[Route('', name: 'index', methods: ['GET'])]
@@ -48,8 +46,8 @@ class TemperatureController extends AbstractController
         $temperatures = $this->temperatureRepository->findByDays($days);
 
         return $this->json([
-                    'message' => 'success',
-                    'result' => $temperatures,
+            'message' => 'success',
+            'result' => $temperatures,
         ]);
     }
 
@@ -65,8 +63,8 @@ class TemperatureController extends AbstractController
         $message = (null === $temperature) ? 'fail' : 'success';
 
         return $this->json([
-                    'message' => $message,
-                    'result' => $temperature,
+            'message' => $message,
+            'result' => $temperature,
         ]);
     }
 
@@ -78,8 +76,8 @@ class TemperatureController extends AbstractController
         $message = (null == $temperature) ? 'fail' : 'success';
 
         return $this->json([
-                    'message' => $message,
-                    'result' => $temperature,
+            'message' => $message,
+            'result' => $temperature,
         ]);
     }
 }

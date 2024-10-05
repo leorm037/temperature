@@ -128,7 +128,7 @@ class TemperatureRegisterCommand extends Command
         $city = $this->cityRepository->listCitySelected();
 
         $weather = $this->climaTempoHelper->weather($city->getId(), $token->getParamValue());
-        
+
         if ($this->climaTempoHelper->getError()) {
             $this->logger->error($this->climaTempoHelper->getError());
         }
@@ -167,24 +167,24 @@ class TemperatureRegisterCommand extends Command
         }
 
         $tempPcsensor = shell_exec(self::TEMP_PCSENSOR_TEMPER_COMMAND);
-        
+
         $result = floatval($tempPcsensor);
 
-        if ($result == 0 && $retry) {
+        if (0 == $result && $retry) {
             sleep(5);
-            
+
             $result = $this->pcsensor(false);
-            
+
             $message = sprintf('Depois de sleep PCSensor Temper retornou o valor %s que não é um número decimal.', $tempPcsensor);
-            
+
             $this->logger->info($message);
-            
+
             return $result;
         }
-        
-        if ($result == 0) {            
+
+        if (0 == $result) {
             $message = sprintf('PCSensor Temper retornou o valor %s que não é um número decimal', $tempPcsensor);
-            
+
             $this->logger->error($message);
         }
 

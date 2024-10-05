@@ -23,13 +23,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/token', name: 'app_token_configuration_')]
 class TokenConfigurationController extends AbstractController
 {
-
     public function __construct(
-            private ConfigurationRepository $configurationRepository,
-            private TranslatorInterface $translator,
-    )
-    {
-        
+        private ConfigurationRepository $configurationRepository,
+        private TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('', name: 'index', methods: ['GET', 'POST'])]
@@ -55,8 +52,8 @@ class TokenConfigurationController extends AbstractController
         }
 
         return $this->render('tokenConfiguration/index.html.twig', [
-                    'token' => $token,
-                    'form' => $form,
+            'token' => $token,
+            'form' => $form,
         ]);
     }
 }

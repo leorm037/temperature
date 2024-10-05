@@ -15,7 +15,6 @@ use Psr\Log\LoggerInterface;
 
 class ClimaTempoService
 {
-
     private const URL_CITY_ADD = 'http://apiadvisor.climatempo.com.br/api-manager/user-token/:your-app-token/locales';
     private const URL_CITY_FIND = 'http://apiadvisor.climatempo.com.br/api/v1/locale/city?country=:country&token=:your-app-token';
     private const URL_CITY_WEATHER = 'http://apiadvisor.climatempo.com.br/api/v1/weather/locale/:city/current?token=:your-app-token&salt=:salt';
@@ -23,10 +22,8 @@ class ClimaTempoService
     private ?array $error = null;
 
     public function __construct(
-            private LoggerInterface $logger
-    )
-    {
-        
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
